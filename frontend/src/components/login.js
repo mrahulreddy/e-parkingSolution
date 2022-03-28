@@ -1,50 +1,140 @@
-import { Link } from "react-router-dom";
-const Login = () => (
-  <>
-    <div className="container" id="container">
-      <div className="form-container sign-up-container">
-        <form action="#">
-          <h1>Create Account</h1>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <button>Sign Up</button>
-        </form>
+import { Button, Form } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import axios from "axios";
+//import { Link } from "react-router-dom";
+import "./login.css";
+import Loading from "./loading";
+import ErrorMessage from "./ErrorMessage";
+const Login = ({ history }) => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // useEffect(() => {
+  //   const userInfo = localStorage.getItem("userInfo");
+
+  //   console.log(userInfo);
+  //   if (userInfo) {
+  //     history.push("/dashboard");
+  //   }
+  // }, [history]);
+
+  const signInSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    setError(false);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      setLoading(true);
+
+      const { data } = await axios.post(
+        "/api/users/login",
+        {
+          email,
+          password,
+        },
+        config
+      );
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      // console.log("pass");
+      // console.log(history);
+      // history.push("/dashboard");
+      window.location = "http://localhost:3000/dashboard";
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+    }
+  };
+
+  const signUpSubmitHandler = async (e) => {
+    e.preventDefault();
+    console.log(email, password);
+    setError(false);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      setLoading(true);
+
+      const { data } = await axios.post(
+        "/api/users/",
+        { name, email, password },
+        config
+      );
+      console.log(data);
+
+      setLoading(false);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+
+  return (
+    <>
+      <div classnName="outside">
+        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+        {loading && <Loading />}
       </div>
-      <div className="form-container sign-in-container">
-        <form action="#">
-          <h1>Sign in</h1>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <a href="#">Forgot your password?</a>
-          <button>Sign In</button>
-        </form>
-      </div>
-      {/* <div className="overlay-container">
-        <div className="overlay">
-          <div className="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
-            <p>
-              To keep connected with us please login with your personal info
-            </p>
-            <button className="ghost" id="signIn">
-              Sign In
-            </button>
-          </div>
-          <div className="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start journey with us</p>
-            <button className="ghost" id="signUp">
-              Sign Up
-            </button>
-            <Link to="/mydata">
-              <h1>hi</h1>
-            </Link>
-          </div>
+      <div className="container" id="container">
+        <div className="form-container sign-up-container">
+          <Form onSubmit={signUpSubmitHandler}>
+            <h1>Create Account</h1>
+            <Form.Control
+              type="name"
+              value={name}
+              placeholder="Enter Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <Form.Control
+              type="email"
+              value={email}
+              placeholder="Enter Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Form.Control
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit">Sign Up</Button>
+          </Form>
         </div>
-      </div> */}
-    </div>
-  </>
-);
+        <div className="form-container sign-in-container">
+          <Form onSubmit={signInSubmitHandler}>
+            <h1>Sign in</h1>
+            <Form.Control
+              type="email"
+              value={email}
+              placeholder="Enter Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Form.Control
+              type="password"
+              value={password}
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <a href="/">Forgot your password?</a>
+            <Button type="submit">Sign In</Button>
+          </Form>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default Login;
