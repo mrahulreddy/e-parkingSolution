@@ -82,8 +82,7 @@ const Login = ({ history }) => {
   return (
     <>
       <div classnName="outside">
-        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-        {loading && <Loading />}
+
       </div>
       <div className="container" id="container">
         <div className="form-container sign-up-container">
