@@ -8,12 +8,15 @@ import {
   Navbar,
   NavDropdown,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
-        <Navbar.Brand href="/">Parking Solution</Navbar.Brand>
+        <Navbar.Brand>
+          <Link to="/">Parking Solution</Link>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -21,14 +24,24 @@ const Header = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/">About Us</Nav.Link>
+            <Nav.Link>
+              <Link to="/">Home</Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link to="/">About Us</Link>
+            </Nav.Link>
 
             <NavDropdown title="More" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/">User FAQ's</NavDropdown.Item>
-              <NavDropdown.Item href="/">Enroll as LandOwner</NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/">User FAQ's</Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/">Enroll as LandOwner</Link>
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="/">Contacts</NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/">Contacts</Link>
+              </NavDropdown.Item>
             </NavDropdown>
 
             <Nav.Link href="#" disabled>

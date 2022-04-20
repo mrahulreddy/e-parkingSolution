@@ -22,17 +22,16 @@ export const LandingPage = () => {
               <p className="subtitle">One place for all your parking needs</p>
             </div>
             <div className="buttonContainer">
-              <Button size="lg" className="landingbutton">
-                Login
-              </Button>
-
-              <Button
-                variant="outline-primary"
-                size="lg"
-                className="landingbutton"
-              >
-                Signup
-              </Button>
+              <Link to="/login">
+                <Button size="lg" className="landingbutton">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="lg" className="landingbutton">
+                  Signup
+                </Button>
+              </Link>
             </div>
           </div>
         </Row>

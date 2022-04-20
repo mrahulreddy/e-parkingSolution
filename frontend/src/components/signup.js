@@ -5,7 +5,7 @@ import axios from "axios";
 
 import Loading from "./loading";
 import ErrorMessage from "./ErrorMessage";
-const Login = ({ history }) => {
+const Signup = ({ history }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -83,9 +83,16 @@ const Login = ({ history }) => {
     <>
       <div classnName="outside"></div>
       <Container>
-        <div className="form-container sign-in-container">
-          <Form onSubmit={signInSubmitHandler}>
-            <h1>Sign in</h1>
+        <div className="form-container sign-up-container">
+          <Form onSubmit={signUpSubmitHandler}>
+            <h1>Create Account</h1>
+            <Form.Control
+              type="name"
+              value={name}
+              placeholder="Enter Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+
             <Form.Control
               type="email"
               value={email}
@@ -99,8 +106,7 @@ const Login = ({ history }) => {
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <a href="/">Forgot your password?</a>
-            <Button type="submit">Sign In</Button>
+            <Button type="submit">Sign Up</Button>
           </Form>
         </div>
       </Container>
@@ -108,4 +114,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default Login;
+export default Signup;
