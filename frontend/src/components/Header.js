@@ -9,6 +9,9 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+const clearuserInfo = () => {
+  localStorage.removeItem("userInfo");
+};
 
 const Header = () => {
   return (
@@ -44,8 +47,8 @@ const Header = () => {
               </NavDropdown.Item>
             </NavDropdown>
 
-            <Nav.Link href="#" disabled>
-              Logout
+            <Nav.Link onClick={clearuserInfo}>
+              <Link to="/">Logout </Link>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
