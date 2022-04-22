@@ -12,48 +12,6 @@ const Signup = ({ history }) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const userInfo = localStorage.getItem("userInfo");
-
-  //   console.log(userInfo);
-  //   if (userInfo) {
-  //     history.push("/dashboard");
-  //   }
-  // }, [history]);
-
-  const signInSubmitHandler = async (e) => {
-    e.preventDefault();
-
-    setError(false);
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      setLoading(true);
-
-      const { data } = await axios.post(
-        "/api/users/login",
-        {
-          email,
-          password,
-        },
-        config
-      );
-
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
-      // console.log("pass");
-      // console.log(history);
-      // history.push("/dashboard");
-      window.location = "http://localhost:3000/dashboard";
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-    }
-  };
-
   const signUpSubmitHandler = async (e) => {
     e.preventDefault();
     console.log(email, password);

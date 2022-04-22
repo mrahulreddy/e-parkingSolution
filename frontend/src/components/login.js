@@ -19,7 +19,6 @@ const Login = () => {
     console.log(userInfo);
     if (userInfo) {
       navigate("/dashboard");
-      console.log("hi rahul");
     }
   }, [navigate]);
 
@@ -47,38 +46,9 @@ const Login = () => {
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       navigate("/dashboard");
-      // console.log("pass");
-      // console.log(history);
-      // history.push("/dashboard");
-      // window.location = "http://localhost:3000/dashboard";
     } catch (error) {
       setLoading(false);
       setError(error);
-    }
-  };
-
-  const signUpSubmitHandler = async (e) => {
-    e.preventDefault();
-    console.log(email, password);
-    setError(false);
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      setLoading(true);
-
-      const { data } = await axios.post(
-        "/api/users/",
-        { name, email, password },
-        config
-      );
-      console.log(data);
-
-      setLoading(false);
-    } catch (error) {
-      setError(error.response.data.message);
     }
   };
 
