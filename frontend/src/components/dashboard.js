@@ -13,7 +13,7 @@ import {
   Accordion,
 } from "react-bootstrap";
 import TimePicker from "./TimePicker";
-import users_data from "../data/users";
+
 import AddPlaces from "./addPlaces";
 import AddAdmin from "./addAdmin";
 import BookPlace from "./bookPlace";
