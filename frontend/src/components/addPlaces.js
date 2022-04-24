@@ -8,6 +8,8 @@ import {
   DropdownButton,
   ButtonGroup,
   Button,
+  Card,
+  Accordion,
 } from "react-bootstrap";
 import TimePicker from "./TimePicker";
 import users_data from "../data/users";
@@ -16,8 +18,6 @@ const addPlaces = () => {
     <div>
       <Container>
         <Form>
-          <h2> Add Places :</h2>
-          <hr />
           <Form.Group className="mb-3">
             <Form.Label>Place name</Form.Label>
             <Form.Control type="text" placeholder="Enter Place" />
@@ -47,7 +47,6 @@ const addPlaces = () => {
             Submit
           </Button>
         </Form>
-        <hr />
       </Container>
     </div>
   );
