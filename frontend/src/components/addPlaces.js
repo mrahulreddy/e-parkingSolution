@@ -49,6 +49,9 @@ const AddPlaces = () => {
       );
 
       localStorage.setItem("addedPlace", JSON.stringify(data));
+      e.target.reset();
+      setStime("00:00");
+      setEtime("24:00");
     } catch (error) {}
   };
 
@@ -97,11 +100,8 @@ const AddPlaces = () => {
               <Col>
                 <Form.Label>End time</Form.Label>
                 <TimePicker
-                  minTime="00:00"
-                  maxTime="24:00"
-                  clockAriaLabel="Toggle clock"
+                  isOpen="true"
                   disableClock="true"
-                  closeClock="false"
                   onChange={setEtime}
                   value={etime}
                 />

@@ -48,7 +48,7 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       setLoading(false);
-      setError(error);
+      setError(error.response.data.message);
     }
   };
 
@@ -57,6 +57,8 @@ const Login = () => {
       <div classnName="outside"></div>
       <Container>
         <div className="form-container sign-in-container">
+          {loading && <Loading />}
+          {error && <ErrorMessage message={error} />}
           <Form onSubmit={signInSubmitHandler}>
             <h1>Sign in</h1>
             <Form.Control
