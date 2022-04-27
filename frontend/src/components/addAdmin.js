@@ -15,7 +15,7 @@ const AddAdmin = () => {
   const [udata, setUdata] = useState([]);
   const get_users_data = async () => {
     console.log("im get data");
-    const { data } = await axios.get("/api/userdata");
+    const { data } = await axios.get("/api/users/getusers");
     console.log(data);
     setUdata(data);
   };
