@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Form,
@@ -9,9 +9,23 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
-import TimePicker from "./TimePicker";
 
-const bookPlace = () => {
+import axios from "axios";
+import TimePicker from "react-time-picker";
+
+const BookPlace = () => {
+  const [pdata, setpdata] = useState([]);
+  const [stime, setStime] = useState("10:00");
+  const get_place_data = async () => {
+    const { data } = await axios.get("/api/users/getplaces");
+
+    setpdata(data);
+  };
+
+  useEffect(() => {
+    get_place_data();
+  }, []);
+
   return (
     <div>
       <Container>
@@ -19,23 +33,19 @@ const bookPlace = () => {
         <hr />
 
         <select name="places" id="places">
-          <option value="" disabled selected>
-            Choose Places
-          </option>
-          <option value="Abbey Wood">Abbey Wood </option>
-          <option value="Acton">Acton </option>
-          <option value="Acton Green">Acton Green </option>
-          <option value="Addington">Addington </option>
-          <option value="Addiscombe">Addiscombe </option>
-          <option value="Aldborough Hatch ">Aldborough Hatch </option>
-          <option value="Aldersbrook">Aldersbrook </option>
-          <option value="Alperton">Alperton </option>
-          <option value="Anerley">Anerley </option>
+          {pdata.map((dat) => (
+            <option> {dat.placeName} </option>
+          ))}
         </select>
         <Row>
           <Col>
             <Form.Label>Start time</Form.Label>
-            <TimePicker />
+            <TimePicker
+              isOpen="true"
+              disableClock="true"
+              onChange={setStime}
+              value={stime}
+            />
           </Col>
           <Col>
             <Form.Label>Required Hours</Form.Label>
@@ -65,4 +75,4 @@ const bookPlace = () => {
   );
 };
 
-export default bookPlace;
+export default BookPlace;

@@ -14,8 +14,8 @@ import axios from "axios";
 const AddAdmin = () => {
   const [udata, setUdata] = useState([]);
   const get_users_data = async () => {
-    console.log("im get data");
     const { data } = await axios.get("/api/users/getusers");
+    console.log("inside data");
     console.log(data);
     setUdata(data);
   };
@@ -33,7 +33,6 @@ const AddAdmin = () => {
           {udata.map((dat) => (
             <option> {dat.name} </option>
           ))}
-          <hr />
         </select>
         <br />
         <Button variant="primary" type="submit">

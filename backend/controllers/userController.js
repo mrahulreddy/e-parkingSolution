@@ -6,6 +6,7 @@ const getUsers = asyncHandler(async (req, res) => {
   const alluserdata = await User.find();
   res.json(alluserdata);
 });
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
 

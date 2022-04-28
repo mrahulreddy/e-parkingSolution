@@ -17,14 +17,6 @@ app.get("/", (req, res) => {
   res.send("API is running....");
 });
 
-app.get("/mydata", (req, res) => {
-  res.send("API is with data");
-});
-
-app.get("/api/userdata", (req, res) => {
-  res.send(users_data);
-});
-
 app.use("/api/users", userRoutes);
 
 app.use(notFound);

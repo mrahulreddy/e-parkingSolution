@@ -1,6 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const Place = require("../models/placeModel");
 
+const getPlaces = asyncHandler(async (req, res) => {
+  const allplacedata = await Place.find();
+  res.json(allplacedata);
+});
+
 const addPlace = asyncHandler(async (req, res) => {
   const { ownerMailId, ownerName, placeName, nos, aph, stime, etime } =
     req.body;
@@ -26,4 +31,4 @@ const addPlace = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addPlace };
+module.exports = { addPlace, getPlaces };
