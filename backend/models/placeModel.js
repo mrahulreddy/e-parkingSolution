@@ -13,7 +13,7 @@ const placeSchema = mongoose.Schema(
     placeName: {
       type: String,
       required: true,
-      // unique: true,
+      unique: true,
     },
     nos: {
       type: String,

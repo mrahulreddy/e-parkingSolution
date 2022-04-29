@@ -12,7 +12,10 @@ import {
   Card,
   Accordion,
 } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import TimePicker from "react-time-picker";
+import SucessMessage from "./SucessMessage";
+import ErrorMessage from "./ErrorMessage";
 
 const AddPlaces = () => {
   const [ownerMailId, setOemail] = useState("");
@@ -22,9 +25,15 @@ const AddPlaces = () => {
   const [aph, setAph] = useState("");
   const [stime, setStime] = useState("00:00");
   const [etime, setEtime] = useState("24:00");
+  const [sucess, setSucess] = useState();
+  const [error, setError] = useState(false);
+
+  let navigate = useNavigate();
 
   const addingPlaces = async (e) => {
     e.preventDefault();
+    setSucess(false);
+    setError(false);
 
     console.log(ownerMailId, ownerName, placeName, nos, aph, stime, etime);
     try {
@@ -52,7 +61,12 @@ const AddPlaces = () => {
       e.target.reset();
       setStime("00:00");
       setEtime("24:00");
-    } catch (error) {}
+      navigate("/dashboard");
+      // window.location.reload();
+      setSucess("Sucessfully added the place");
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   };
 
   return (
@@ -60,6 +74,8 @@ const AddPlaces = () => {
       <Container>
         <Form onSubmit={addingPlaces}>
           <Form.Group className="mb-3">
+            {sucess && <SucessMessage message={sucess} />}
+            {error && <ErrorMessage message={error} />}
             <Row>
               <Col>
                 <Form.Label>Place name</Form.Label>

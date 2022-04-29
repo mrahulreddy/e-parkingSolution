@@ -10,6 +10,12 @@ const addPlace = asyncHandler(async (req, res) => {
   const { ownerMailId, ownerName, placeName, nos, aph, stime, etime } =
     req.body;
 
+  const placeExists = await Place.findOne({ placeName });
+
+  if (placeExists) {
+    res.status(404);
+    throw new Error("Place already exists");
+  }
   const place = await Place.create({
     ownerMailId,
     ownerName,
