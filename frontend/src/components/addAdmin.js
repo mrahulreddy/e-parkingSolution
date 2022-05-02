@@ -15,8 +15,8 @@ const AddAdmin = () => {
   const [udata, setUdata] = useState([]);
   const get_users_data = async () => {
     const { data } = await axios.get("/api/users/getusers");
-    console.log("inside data");
-    console.log(data);
+    // console.log("inside data");
+    // console.log(data);
     setUdata(data);
   };
 
@@ -31,7 +31,7 @@ const AddAdmin = () => {
         <Form.Label>List of users:</Form.Label>
         <select>
           {udata.map((dat) => (
-            <option> {dat.name} </option>
+            <option> {dat.email} </option>
           ))}
         </select>
         <br />

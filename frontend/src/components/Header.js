@@ -43,7 +43,7 @@ const Header = () => {
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Link to="/">Contacts</Link>
+                <Link to="/contactus">Contact us</Link>
               </NavDropdown.Item>
             </NavDropdown>
 

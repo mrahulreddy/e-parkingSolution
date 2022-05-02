@@ -74,7 +74,7 @@ const Login = () => {
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <a href="/">Forgot your password?</a>
+            {/* <a href="/">Forgot your password?</a> */}
             <Button type="submit">Sign In</Button>
           </Form>
         </div>

@@ -1,7 +1,8 @@
 import { Button, Container, Form } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 //import { Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 import SucessMessage from "./SucessMessage";
 
@@ -15,9 +16,11 @@ const Signup = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [sucess, setSucess] = useState(false);
 
+  const form = useRef();
+
   const signUpSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+
     setError(false);
     setSucess(false);
     try {
@@ -37,6 +40,21 @@ const Signup = ({ history }) => {
 
       setLoading(false);
       setSucess(name + " you are Sucessfully Signup ....Please login!!!");
+      emailjs
+        .sendForm(
+          "service_r1b9r68",
+          "template_8btovxs",
+          form.current,
+          "rm0b1LaHrEM0ma_XW"
+        )
+        .then(
+          (result) => {
+            console.log("mail sucess");
+          },
+          (error) => {
+            console.log("mail fail");
+          }
+        );
     } catch (error) {
       setSucess(false);
       setLoading(false);
@@ -52,10 +70,11 @@ const Signup = ({ history }) => {
           {loading && <Loading />}
           {error && <ErrorMessage message={error} />}
           {sucess && <SucessMessage message={sucess} />}
-          <Form onSubmit={signUpSubmitHandler}>
+          <Form ref={form} onSubmit={signUpSubmitHandler}>
             <h1>Create Account</h1>
             <Form.Control
               type="name"
+              name="user_name"
               value={name}
               placeholder="Enter Name"
               onChange={(e) => setName(e.target.value)}
@@ -63,6 +82,7 @@ const Signup = ({ history }) => {
 
             <Form.Control
               type="email"
+              name="user_email"
               value={email}
               placeholder="Enter Email"
               onChange={(e) => setEmail(e.target.value)}
