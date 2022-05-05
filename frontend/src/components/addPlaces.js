@@ -140,7 +140,7 @@ const AddPlaces = () => {
             </Row>
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            Add Place
           </Button>
         </Form>
       </Container>

@@ -22,10 +22,12 @@ const placeSchema = mongoose.Schema(
     nas: {
       type: String,
       required: false,
+      default: 0,
     },
     nbs: {
       type: String,
       required: false,
+      default: 0,
     },
     aph: {
       type: String,

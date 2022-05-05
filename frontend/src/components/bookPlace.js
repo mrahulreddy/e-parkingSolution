@@ -17,11 +17,14 @@ import DatePicker from "sassy-datepicker";
 const BookPlace = () => {
   const [pdata, setpdata] = useState([]);
   const [stime, setStime] = useState("10:00");
+  const [nos, setNos] = useState("0");
   const [sdate, setSdate] = useState("");
   const [splace, setSplace] = useState("...");
   const get_place_data = async () => {
     const { data } = await axios.get("/api/users/getplaces");
 
+    {
+    }
     setpdata(data);
   };
 
@@ -30,6 +33,12 @@ const BookPlace = () => {
       .getElementById("places-options")
       .addEventListener("change", function () {
         setSplace(this.value);
+        console.log(this.value);
+        pdata.map((dat) => {
+          if (dat.placeName.toString() == this.value.toString()) {
+            setNos(dat.nos);
+          }
+        });
       });
 
     get_place_data();
@@ -102,12 +111,13 @@ const BookPlace = () => {
             </Col>
           </Row>
           <Button variant="primary" type="submit">
-            Submit
+            Book Place
           </Button>
           <br />
           <Row>
             <Form.Label>
-              Number of available space in {splace} on {sdate} at {stime}
+              Number of available space in {splace} on {sdate} at {stime} is =
+              {nos}
             </Form.Label>
           </Row>
           <hr />

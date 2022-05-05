@@ -16,7 +16,6 @@ const Login = () => {
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
 
-    console.log(userInfo);
     if (userInfo) {
       navigate("/dashboard");
     }
