@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import TimePicker from "react-time-picker";
 import DatePicker from "sassy-datepicker";
+import ErrorMessage from "./ErrorMessage";
 
 const BookPlace = () => {
   const [pdata, setpdata] = useState([]);
@@ -20,25 +21,36 @@ const BookPlace = () => {
   const [nos, setNos] = useState("0");
   const [sdate, setSdate] = useState("");
   const [splace, setSplace] = useState("...");
+  const [rseat, setRseat] = useState("1");
+  const [rhrs, setRhrs] = useState("1");
+  const [error, setError] = useState("");
+
   const get_place_data = async () => {
     const { data } = await axios.get("/api/users/getplaces");
-
-    {
-    }
     setpdata(data);
   };
 
+  const get_available_seat = async () => {
+    console.log(pdata);
+    await pdata.map((dat) => {
+      if (dat.placeName.toString() === splace.toString()) {
+        setNos(dat.nos - dat.nbs);
+
+        if (dat.nos - dat.nbs - rseat < 0) {
+          setError("Required seat not available");
+        } else {
+          setError(false);
+        }
+      }
+    });
+  };
+
   useEffect(() => {
+    setError(false);
     document
       .getElementById("places-options")
       .addEventListener("change", function () {
         setSplace(this.value);
-        console.log(this.value);
-        pdata.map((dat) => {
-          if (dat.placeName.toString() == this.value.toString()) {
-            setNos(dat.nos);
-          }
-        });
       });
 
     get_place_data();
@@ -78,6 +90,7 @@ const BookPlace = () => {
     <div>
       <Container>
         <Form onSubmit={bookPlaces}>
+          {error && <ErrorMessage message={error} />}
           <select name="places" id="places-options">
             <option selected>choose places</option>
             {pdata.map((dat) => (
@@ -100,19 +113,34 @@ const BookPlace = () => {
             <Col>
               <Form.Label>Required Hours</Form.Label>
 
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                value={rhrs}
+                onChange={(e) => setRhrs(e.target.value)}
+              />
             </Col>
             <Col>
               <Form.Label>Number of slots</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter number of space needed "
+                value={rseat}
+                onChange={(e) => setRseat(e.target.value)}
               />
             </Col>
           </Row>
-          <Button variant="primary" type="submit">
-            Book Place
-          </Button>
+          <Row>
+            <Col>
+              <Button variant="primary" onClick={get_available_seat}>
+                Check availablity
+              </Button>
+            </Col>
+            <Col>
+              <Button variant="primary" type="submit">
+                Book Place
+              </Button>
+            </Col>
+          </Row>
           <br />
           <Row>
             <Form.Label>
