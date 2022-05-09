@@ -14,6 +14,7 @@ import axios from "axios";
 import TimePicker from "react-time-picker";
 import DatePicker from "sassy-datepicker";
 import ErrorMessage from "./ErrorMessage";
+import SucessMessage from "./SucessMessage";
 
 const BookPlace = () => {
   const [pdata, setpdata] = useState([]);
@@ -24,6 +25,7 @@ const BookPlace = () => {
   const [rseat, setRseat] = useState("1");
   const [rhrs, setRhrs] = useState("1");
   const [error, setError] = useState("");
+  const [sucess, setSucess] = useState();
 
   const get_place_data = async () => {
     const { data } = await axios.get("/api/users/getplaces");
@@ -66,9 +68,24 @@ const BookPlace = () => {
     setSdate(datestr);
   }, []);
 
-  const bookPlaces = (e) => {
+  const bookPlaces = async (e) => {
     e.preventDefault();
     try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/users/updatebook",
+        {
+          placeName,
+          nos,
+        },
+        config
+      );
+      setSucess("Sucessfully Booked the place");
     } catch (error) {}
   };
 
@@ -91,6 +108,7 @@ const BookPlace = () => {
       <Container>
         <Form onSubmit={bookPlaces}>
           {error && <ErrorMessage message={error} />}
+          {sucess && <SucessMessage message={sucess} />}
           <select name="places" id="places-options">
             <option selected>choose places</option>
             {pdata.map((dat) => (

@@ -7,14 +7,14 @@ const getPlaces = asyncHandler(async (req, res) => {
 });
 
 const updateNbs = asyncHandler(async (req, res) => {
-  const { placeName, nbs } = req.body;
+  const { placeName, nos } = req.body;
 
   const placeExists = await Place.findOne({ placeName });
 
   if (placeExists) {
     // console.log(placeExists);
     // console.log(parseInt(placeExists.nbs) + parseInt(nbs));
-    placeExists.nbs = parseInt(placeExists.nbs) + parseInt(nbs);
+    placeExists.nbs = parseInt(placeExists.nbs) + parseInt(nos);
     const updatedPlace = await placeExists.save();
     res.json(updatedPlace);
   } else {
