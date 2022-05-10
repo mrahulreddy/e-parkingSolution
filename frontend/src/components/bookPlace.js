@@ -76,8 +76,8 @@ const BookPlace = () => {
           "Content-type": "application/json",
         },
       };
-
-      const { data } = await axios.post(
+      var placeName = splace;
+      const { data } = await axios.put(
         "/api/users/updatebook",
         {
           placeName,
