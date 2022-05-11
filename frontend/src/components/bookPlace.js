@@ -36,13 +36,14 @@ const BookPlace = () => {
     console.log(pdata);
     await pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
-        setNos(dat.nos - dat.nbs);
+        setNos(parseInt(dat.nos) - parseInt(dat.nbs));
 
-        if (dat.nos - dat.nbs - rseat < 0) {
+        if (parseInt(dat.nos) - parseInt(dat.nbs) - parseInt(rseat) < 0) {
           setError("Required seat not available");
         } else {
           setError(false);
         }
+      } else {
       }
     });
   };
@@ -77,11 +78,12 @@ const BookPlace = () => {
         },
       };
       var placeName = splace;
+      var nbs = rseat;
       const { data } = await axios.put(
         "/api/users/updatebook",
         {
           placeName,
-          nos,
+          nbs,
         },
         config
       );
