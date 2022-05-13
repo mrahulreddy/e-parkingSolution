@@ -88,6 +88,7 @@ const BookPlace = () => {
         config
       );
       setSucess("Sucessfully Booked the place");
+      get_place_data();
     } catch (error) {}
   };
 

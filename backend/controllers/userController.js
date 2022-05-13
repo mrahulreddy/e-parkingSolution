@@ -40,6 +40,27 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+const addAdmin = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user) {
+    user.isAdmin = true;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+});
+
+const addOwner = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    user.isOwner = true;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+});
+
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -61,4 +82,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser, getUsers };
+module.exports = { registerUser, authUser, getUsers, addAdmin, addOwner };

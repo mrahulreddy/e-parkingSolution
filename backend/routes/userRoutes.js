@@ -3,6 +3,8 @@ const {
   registerUser,
   authUser,
   getUsers,
+  addAdmin,
+  addOwner,
 } = require("../controllers/userController");
 const {
   addPlace,
@@ -17,5 +19,7 @@ router.route("/getusers").get(getUsers);
 router.route("/addplaces").post(addPlace);
 router.route("/getplaces").get(getPlaces);
 router.route("/updatebook").put(updateNbs);
+router.route("/addadmin").put(addAdmin);
+router.route("/addowner").put(addOwner);
 
 module.exports = router;
