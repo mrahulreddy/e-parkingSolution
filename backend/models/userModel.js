@@ -31,6 +31,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    isAskedAsLandOwner: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     pic: {
       type: String,
       required: true,

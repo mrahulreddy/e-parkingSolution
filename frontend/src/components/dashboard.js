@@ -38,8 +38,8 @@ const Dashboard = () => {
         <h1>
           <center>
             {isadmin && "Admin "}
-            {isowner && "Land Owner "}
-            {isdriver && "Driver "}
+            {isowner && "Landowner "}
+            {!isadmin && !isowner && "Driver "}
             Dashboard
           </center>
         </h1>
@@ -60,7 +60,7 @@ const Dashboard = () => {
           </Accordion>
         )}
 
-        {(isadmin || isowner || isdriver) && (
+        {(isadmin || (!isadmin && !isowner)) && (
           <Accordion>
             <Card>
               <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
