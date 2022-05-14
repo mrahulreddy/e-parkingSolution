@@ -26,6 +26,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    isValidated: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     pic: {
       type: String,
       required: true,

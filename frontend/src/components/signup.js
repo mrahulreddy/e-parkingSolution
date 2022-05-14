@@ -1,7 +1,7 @@
 import { Button, Container, Form } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-//import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 
 import SucessMessage from "./SucessMessage";
@@ -40,6 +40,12 @@ const Signup = ({ history }) => {
 
       setLoading(false);
       setSucess(name + " you are Sucessfully Signup ....Please login!!!");
+
+      // console.log(form.current.user_token);
+      // console.log(document.getElementById("user_token"));
+      document.getElementById("user_token").value = data._id;
+      // console.log(form.current.user_token);
+      // console.log(form.current);
       emailjs
         .sendForm(
           "service_r1b9r68",
@@ -79,6 +85,7 @@ const Signup = ({ history }) => {
               placeholder="Enter Name"
               onChange={(e) => setName(e.target.value)}
             />
+            <Form.Control type="hidden" name="user_token" id="user_token" />
 
             <Form.Control
               type="email"
@@ -95,6 +102,9 @@ const Signup = ({ history }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button type="submit">Sign Up</Button>
+            <Link to="/login">
+              <h7 style={{ padding: "35px" }}>Sign In </h7>
+            </Link>
           </Form>
         </div>
       </Container>

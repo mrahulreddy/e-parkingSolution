@@ -5,6 +5,9 @@ const {
   getUsers,
   addAdmin,
   addOwner,
+  validateUser,
+  removeAdmin,
+  removeOwner,
 } = require("../controllers/userController");
 const {
   addPlace,
@@ -21,5 +24,8 @@ router.route("/getplaces").get(getPlaces);
 router.route("/updatebook").put(updateNbs);
 router.route("/addadmin").put(addAdmin);
 router.route("/addowner").put(addOwner);
+router.route("/removeAdmin").put(removeAdmin);
+router.route("/removeOwner").put(removeOwner);
+router.route("/validate").put(validateUser);
 
 module.exports = router;

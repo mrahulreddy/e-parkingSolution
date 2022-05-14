@@ -1,7 +1,7 @@
 import { Button, Container, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-//import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Loading from "./loading";
@@ -67,7 +67,6 @@ const Login = () => {
               placeholder="Enter Email"
               onChange={(e) => setEmail(e.target.value)}
             />
-
             <Form.Control
               type="password"
               value={password}
@@ -75,7 +74,10 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             {/* <a href="/">Forgot your password?</a> */}
-            <Button type="submit">Sign In</Button>
+            <Button type="submit">Sign In</Button>{" "}
+            <Link to="/signup">
+              <h7 style={{ padding: "35px" }}>Sign Up </h7>
+            </Link>
           </Form>
         </div>
       </Container>

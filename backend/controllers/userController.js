@@ -1,4 +1,6 @@
+const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
+const { default: mongoose } = require("mongoose");
 const User = require("../models/userModel");
 const generateToken = require("../util/generateToken");
 
@@ -61,12 +63,53 @@ const addOwner = asyncHandler(async (req, res) => {
   }
 });
 
+const removeAdmin = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user) {
+    user.isAdmin = false;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+});
+
+const removeOwner = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    user.isOwner = false;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+});
+
+const validateUser = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+
+  // var id = new mongoose.Types.ObjectId(token);
+  const user = await User.findOne({ _id: token });
+
+  if (user) {
+    user.isValidated = true;
+    const updatedUser = await user.save();
+    res.json("SucessFully Sign up");
+  } else {
+    res.status(400);
+    throw new Error("Not a Valid link");
+  }
+});
+
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
+  if (
+    user &&
+    (await user.matchPassword(password)) &&
+    user.isValidated == true
+  ) {
     res.json({
       _id: user._id,
       name: user.name,
@@ -82,4 +125,13 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser, getUsers, addAdmin, addOwner };
+module.exports = {
+  registerUser,
+  authUser,
+  getUsers,
+  addAdmin,
+  addOwner,
+  validateUser,
+  removeAdmin,
+  removeOwner,
+};

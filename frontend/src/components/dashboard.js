@@ -39,7 +39,7 @@ const Dashboard = () => {
           <center>
             {isadmin && "Admin "}
             {isowner && "Land Owner "}
-            {isdriver && "User "}
+            {isdriver && "Driver "}
             Dashboard
           </center>
         </h1>
