@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
-import Header from "./components/Header";
 
 import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/dashboard";
@@ -11,7 +10,6 @@ import Validation from "./components/validation";
 
 const App = () => (
   <BrowserRouter>
-    <Header />
     <main>
       <Routes>
         <Route path="/" element={<LandingPage />} />

@@ -13,27 +13,40 @@ import {
   Accordion,
 } from "react-bootstrap";
 import TimePicker from "./TimePicker";
+import axios from "axios";
 
 import AddPlaces from "./addPlaces";
 import AddAdmin from "./addAdmin";
 import BookPlace from "./bookPlace";
 import Reports from "./reports";
+import Header from "../components/Header";
 const Dashboard = () => {
   const [isadmin, setIsadmin] = useState(false);
   const [isowner, setIsowner] = useState(false);
   const [isdriver, setIsdriver] = useState(true);
+  const [pdata, setpdata] = useState([]);
+
+  const get_place_data = async () => {
+    const getplaces = await axios.get("/api/users/getplaces");
+    setpdata(getplaces.data);
+  };
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     setIsadmin(JSON.parse(userInfo).isAdmin);
     setIsowner(JSON.parse(userInfo).isOwner);
-    setIsdriver(true);
-  }, []);
+    // setIsdriver(true);
+    // console.log("+++++++++++++++++++", isadmin, isowner);
+    if (!isadmin && !isowner) get_place_data();
+  }, [isadmin, isowner]);
 
-  function addplaces() {}
+  function addplaces() { }
+  
+  // console.log('pdata', pdata)
 
   return (
     <div>
+      <Header />
       <Container>
         <h1>
           <center>
@@ -68,7 +81,9 @@ const Dashboard = () => {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <BookPlace />
+                  {pdata.length > 0 && (
+                    <BookPlace pdata={pdata} get_place_data={get_place_data} />
+                  )}
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -97,7 +112,7 @@ const Dashboard = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="0">
               <Card.Body>
-                <Reports />
+                <Reports pdata={pdata} />
               </Card.Body>
             </Accordion.Collapse>
           </Card>

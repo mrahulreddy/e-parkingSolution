@@ -3,21 +3,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import Header from "../components/Header";
 
 import Loading from "./loading";
 import ErrorMessage from "./ErrorMessage";
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isUserLogin, setLogin] = useState(false);
   let navigate = useNavigate();
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
 
     if (userInfo) {
-      navigate("/dashboard");
+      // navigate("/dashboard");
+      setLogin(true);
     }
   }, [navigate]);
 
@@ -45,7 +49,8 @@ const Login = () => {
       localStorage.setItem("userInfo", JSON.stringify(data));
 
       setLoading(false);
-      navigate("/dashboard");
+      // navigate("/dashboard");
+      setLogin(true);
     } catch (error) {
       setLoading(false);
       setError(error.response.data.message);
@@ -54,6 +59,7 @@ const Login = () => {
 
   return (
     <>
+      <Header />
       <div classnName="outside"></div>
       <Container>
         <div className="form-container sign-in-container">
@@ -80,6 +86,7 @@ const Login = () => {
             </Link>
           </Form>
         </div>
+        {isUserLogin && <Navigate to="/dashboard" />}
       </Container>
     </>
   );

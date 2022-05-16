@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 export const Validation = () => {
   const search = useLocation().search;
@@ -43,6 +44,7 @@ export const Validation = () => {
 
   return (
     <div>
+      <Header />
       <Container>
         <div style={validationStyle}>
           Rahul E-Parking Solutions

@@ -16,8 +16,9 @@ import DatePicker from "sassy-datepicker";
 import ErrorMessage from "./ErrorMessage";
 import SucessMessage from "./SucessMessage";
 
-const BookPlace = () => {
-  const [pdata, setpdata] = useState([]);
+const BookPlace = (props) => {
+  const { pdata, get_place_data } = props;
+  // const [pdata, setpdata] = useState([]);
   const [stime, setStime] = useState("10:00");
   const [nos, setNos] = useState("0");
   const [sdate, setSdate] = useState("");
@@ -27,13 +28,14 @@ const BookPlace = () => {
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState();
 
-  const get_place_data = async () => {
-    const { data } = await axios.get("/api/users/getplaces");
-    setpdata(data);
-  };
+  // const get_place_data = async () => {
+  //   const { data } = await axios.get("/api/users/getplaces");
+  //   setpdata(data);
+  // };
+  console.log("pdatapdata", pdata);
 
   const get_available_seat = async () => {
-    console.log(pdata);
+    console.log(pdata, "pdata");
     await pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
         setNos(parseInt(dat.nos) - parseInt(dat.nbs));
@@ -56,7 +58,7 @@ const BookPlace = () => {
         setSplace(this.value);
       });
 
-    get_place_data();
+    // get_place_data();
     var date3 = new Date();
 
     const datestr =
@@ -165,8 +167,8 @@ const BookPlace = () => {
           <br />
           <Row>
             <Form.Label>
-              Number of available space in {splace} on {sdate} at {stime} is =
-              {nos}
+              Number of available space in {splace} on {sdate} at {stime} is
+              <h1 style={{ color: "red" }}>{nos}</h1>
             </Form.Label>
           </Row>
           <hr />

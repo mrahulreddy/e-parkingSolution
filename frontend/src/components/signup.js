@@ -8,6 +8,7 @@ import SucessMessage from "./SucessMessage";
 
 import Loading from "./loading";
 import ErrorMessage from "./ErrorMessage";
+import Header from "../components/Header";
 const Signup = ({ history }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -70,6 +71,7 @@ const Signup = ({ history }) => {
 
   return (
     <>
+      <Header />
       <div classnName="outside"></div>
       <Container>
         <div className="form-container sign-up-container">

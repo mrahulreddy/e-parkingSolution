@@ -1,8 +1,10 @@
 import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 
-const Reports = () => {
+const Reports = (props) => {
+  const { pdata } = props;
   const [isadmin, setIsadmin] = useState(false);
   const [isowner, setIsowner] = useState(false);
   const [isdriver, setIsdriver] = useState(true);
@@ -103,9 +105,16 @@ const Reports = () => {
     <div>
       <Container>
         <h5>
-          <u>
-            <center>{isadmin && "User Data "}</center>
-          </u>
+          {isadmin && (
+            <u>
+              <center>{"User Data "}</center>
+            </u>
+          )}
+          {!isadmin && !isowner && (
+            <u>
+              <center>{"Booked Places"}</center>
+            </u>
+          )}
         </h5>
         {isadmin && (
           <Table striped bordered hover size="sm">
@@ -164,6 +173,34 @@ const Reports = () => {
                       </Button>
                     </center>
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+        {!isadmin && !isowner && pdata.length > 0 && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Sno</th>
+                <th>Owner Name</th>
+                <th>Owner Email</th>
+                <th>Place Name</th>
+                <th>Booked Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pdata.map((dat) => (
+                <tr>
+                  <td>{cnt && cnt++}</td>
+                  <td>{dat.ownerName}</td>
+                  <td>{dat.ownerMailId}</td>
+                  <td>{dat.placeName}</td>
+                  <td>{moment(dat.createdAt).format('MM/DD/YYYY')}</td>
+                  <td>{dat.stime}</td>
+                  <td>{dat.etime}</td>
                 </tr>
               ))}
             </tbody>

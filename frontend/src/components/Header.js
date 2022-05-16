@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -12,8 +12,12 @@ import { Link } from "react-router-dom";
 const clearuserInfo = () => {
   localStorage.removeItem("userInfo");
 };
+console.log('HHHHHHHHHHHHHHHHHHHHHHH')
 
 const Header = () => {
+
+  const [logout, setLogOut] = useState(localStorage.getItem("userInfo"));
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -46,10 +50,14 @@ const Header = () => {
                 <Link to="/contactus">Contact us</Link>
               </NavDropdown.Item>
             </NavDropdown>
-
-            <Nav.Link onClick={clearuserInfo}>
-              <Link to="/">Logout </Link>
-            </Nav.Link>
+            {logout && (
+              <Nav.Link onClick={() => {
+                localStorage.removeItem("userInfo");
+                setLogOut(localStorage.getItem("userInfo"));
+              }}>
+                <Link to="/">Logout </Link>
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
