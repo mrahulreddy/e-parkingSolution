@@ -11,6 +11,7 @@ const Reports = (props) => {
   const [udata, setUdata] = useState([]);
   const [suser, setSuser] = useState([]);
   var cnt = 1;
+  var cnt2 = 1;
   const get_users_data = async () => {
     const { data } = await axios.get("/api/users/getusers");
     setUdata(data);
@@ -125,7 +126,6 @@ const Reports = (props) => {
                 <th>Email</th>
                 <th>Is Admin</th>
                 <th>Is Owner</th>
-
                 <th>
                   <center>Actions</center>
                 </th>
@@ -178,27 +178,27 @@ const Reports = (props) => {
             </tbody>
           </Table>
         )}
-        {!isadmin && !isowner && pdata.length > 0 && (
+        {isadmin && pdata.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
                 <th>Sno</th>
+                <th>Place Name</th>
                 <th>Owner Name</th>
                 <th>Owner Email</th>
-                <th>Place Name</th>
-                <th>Booked Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
+                <th>Place created Date</th>
+                <th>Open Time</th>
+                <th>Close Time</th>
               </tr>
             </thead>
             <tbody>
               {pdata.map((dat) => (
                 <tr>
-                  <td>{cnt && cnt++}</td>
+                  <td>{cnt2 && cnt2++}</td>
+                  <td>{dat.placeName}</td>
                   <td>{dat.ownerName}</td>
                   <td>{dat.ownerMailId}</td>
-                  <td>{dat.placeName}</td>
-                  <td>{moment(dat.createdAt).format('MM/DD/YYYY')}</td>
+                  <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
                   <td>{dat.stime}</td>
                   <td>{dat.etime}</td>
                 </tr>

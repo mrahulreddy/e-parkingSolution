@@ -63,7 +63,7 @@ const AddPlaces = () => {
       setEtime("24:00");
       navigate("/dashboard");
       // window.location.reload();
-      setSucess("Sucessfully added the place");
+      setSucess("Successfully added the place");
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -105,7 +105,7 @@ const AddPlaces = () => {
             <br />
             <Row>
               <Col>
-                <Form.Label>Start time </Form.Label>
+                <Form.Label>Open time </Form.Label>
                 <TimePicker
                   isOpen="true"
                   disableClock="true"
@@ -114,7 +114,7 @@ const AddPlaces = () => {
                 />
               </Col>
               <Col>
-                <Form.Label>End time</Form.Label>
+                <Form.Label>Close time</Form.Label>
                 <TimePicker
                   isOpen="true"
                   disableClock="true"

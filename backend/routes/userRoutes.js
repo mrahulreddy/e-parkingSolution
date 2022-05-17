@@ -8,6 +8,7 @@ const {
   validateUser,
   removeAdmin,
   removeOwner,
+  requestOwner,
 } = require("../controllers/userController");
 const {
   addPlace,
@@ -26,6 +27,7 @@ router.route("/addadmin").put(addAdmin);
 router.route("/addowner").put(addOwner);
 router.route("/removeAdmin").put(removeAdmin);
 router.route("/removeOwner").put(removeOwner);
+router.route("/requestOwner").put(requestOwner);
 router.route("/validate").put(validateUser);
 
 module.exports = router;

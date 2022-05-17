@@ -1,3 +1,4 @@
+import "./seatMap.css";
 import React, { useEffect, useState } from "react";
 import {
   Col,
@@ -8,6 +9,7 @@ import {
   DropdownButton,
   ButtonGroup,
   Button,
+  Table,
 } from "react-bootstrap";
 
 import axios from "axios";
@@ -15,18 +17,104 @@ import TimePicker from "react-time-picker";
 import DatePicker from "sassy-datepicker";
 import ErrorMessage from "./ErrorMessage";
 import SucessMessage from "./SucessMessage";
+import SeatMap from "./seatMap";
 
 const BookPlace = (props) => {
   const { pdata, get_place_data } = props;
   // const [pdata, setpdata] = useState([]);
   const [stime, setStime] = useState("10:00");
   const [nos, setNos] = useState("0");
+  const [totalSeat, setTotalSeat] = useState(0);
   const [sdate, setSdate] = useState("");
   const [splace, setSplace] = useState("...");
   const [rseat, setRseat] = useState("1");
   const [rhrs, setRhrs] = useState("1");
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState();
+  const [bookedSeats, setBookedSeats] = useState("");
+  const [bookedSeatcnt, setBookedSeatcnt] = useState(0);
+
+  const selectedSeat = (selSeat, status) => {
+    if ("N" === status) {
+      let result = bookedSeats.indexOf(selSeat);
+      if (result >= 0) {
+        document.getElementById(selSeat).style.backgroundColor =
+          "rgb(43, 255, 0)";
+        if (result > 0) {
+          setBookedSeats(bookedSeats.replace("," + selSeat, ""));
+        } else {
+          setBookedSeats(bookedSeats.replace(selSeat + ",", ""));
+        }
+        if (parseInt(bookedSeatcnt) - 1 <= 0) {
+          setBookedSeats("");
+        }
+
+        setBookedSeatcnt(bookedSeatcnt - 1);
+      } else {
+        document.getElementById(selSeat).style.backgroundColor =
+          "rgb(184, 134, 11)";
+
+        if (bookedSeatcnt > 0) {
+          setBookedSeats(bookedSeats + "," + selSeat);
+        } else {
+          setBookedSeats(selSeat);
+        }
+
+        setBookedSeatcnt(bookedSeatcnt + 1);
+      }
+    }
+  };
+
+  function content() {
+    let seatContent = [];
+    var cnt = 0;
+    var total_seats = 8;
+
+    var seat_names = [
+      "A1|Y",
+      "A2|N",
+      "A3|N",
+      "A4|N",
+      "A5|Y",
+      "A6|N",
+      "A7|N",
+      "A8|N",
+    ];
+    var rows = total_seats / 10;
+    for (var j = 0; j < rows; j++) {
+      for (var i = 0; i < 10; i++) {
+        cnt++;
+        if (cnt > total_seats) {
+          break;
+        }
+        var text = seat_names[cnt - 1];
+        const valArray = text.split("|");
+        let sn = valArray[0];
+        let status = valArray[1];
+        let clr = "rgb(43, 255, 0)";
+        if ("Y" === status) {
+          clr = "red";
+          // console.log(text);
+          // console.log(clr);
+        }
+        seatContent.push(
+          <td>
+            <div
+              class="seat"
+              id={sn}
+              key={sn}
+              style={{ background: clr }}
+              onClick={() => selectedSeat(sn, status)}
+            >
+              {sn}
+            </div>
+          </td>
+        );
+      }
+      seatContent.push(<tr />);
+    }
+    return seatContent;
+  }
 
   // const get_place_data = async () => {
   //   const { data } = await axios.get("/api/users/getplaces");
@@ -38,6 +126,7 @@ const BookPlace = (props) => {
     console.log(pdata, "pdata");
     await pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
+        setTotalSeat(parseInt(dat.nos));
         setNos(parseInt(dat.nos) - parseInt(dat.nbs));
 
         if (parseInt(dat.nos) - parseInt(dat.nbs) - parseInt(rseat) < 0) {
@@ -171,8 +260,26 @@ const BookPlace = (props) => {
               <h1 style={{ color: "red" }}>{nos}</h1>
             </Form.Label>
           </Row>
-          <hr />
         </Form>
+        <div>
+          {/* <Table borderless> */}
+          <Table borderless size="sm">
+            {/* <Table hover size="sm"> */}
+            <thead>
+              <tr>
+                <th colSpan={10}>
+                  <center>
+                    Available Seats<hr></hr>
+                  </center>
+                </th>
+              </tr>
+            </thead>
+
+            {content()}
+          </Table>
+          Selected booking slots are: {bookedSeats} | Total Seats :{" "}
+          {bookedSeatcnt}
+        </div>
       </Container>
     </div>
   );

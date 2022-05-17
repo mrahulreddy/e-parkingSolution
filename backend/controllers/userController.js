@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Error occured...");
+    throw new Error("Error occurred...");
   }
 });
 
@@ -79,6 +79,16 @@ const removeOwner = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (user) {
     user.isOwner = false;
+    const updatedUser = await user.save();
+    res.json(updatedUser);
+  }
+});
+
+const requestOwner = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    user.isAskedAsLandOwner = true;
     const updatedUser = await user.save();
     res.json(updatedUser);
   }
@@ -134,4 +144,5 @@ module.exports = {
   validateUser,
   removeAdmin,
   removeOwner,
+  requestOwner,
 };
