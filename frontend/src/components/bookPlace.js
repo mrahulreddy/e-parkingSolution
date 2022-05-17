@@ -68,18 +68,15 @@ const BookPlace = (props) => {
   function content() {
     let seatContent = [];
     var cnt = 0;
-    var total_seats = 8;
+    var total_seats = 15;
 
-    var seat_names = [
-      "A1|Y",
-      "A2|N",
-      "A3|N",
-      "A4|N",
-      "A5|Y",
-      "A6|N",
-      "A7|N",
-      "A8|N",
-    ];
+    var seat_names = [];
+
+    for (let ac = 65; ac < 91; ac++) {
+      for (let index = 1; index < 11; index++) {
+        seat_names.push(String.fromCharCode(ac) + index + "|N");
+      }
+    }
     var rows = total_seats / 10;
     for (var j = 0; j < rows; j++) {
       for (var i = 0; i < 10; i++) {
@@ -120,10 +117,10 @@ const BookPlace = (props) => {
   //   const { data } = await axios.get("/api/users/getplaces");
   //   setpdata(data);
   // };
-  console.log("pdatapdata", pdata);
 
   const get_available_seat = async () => {
     console.log(pdata, "pdata");
+
     await pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
         setTotalSeat(parseInt(dat.nos));
@@ -274,7 +271,6 @@ const BookPlace = (props) => {
                 </th>
               </tr>
             </thead>
-
             {content()}
           </Table>
           Selected booking slots are: {bookedSeats} | Total Seats :{" "}

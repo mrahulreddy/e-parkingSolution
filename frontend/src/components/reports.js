@@ -126,6 +126,7 @@ const Reports = (props) => {
                 <th>Email</th>
                 <th>Is Admin</th>
                 <th>Is Owner</th>
+                <th>Is Validated</th>
                 <th>
                   <center>Actions</center>
                 </th>
@@ -139,6 +140,7 @@ const Reports = (props) => {
                   <td>{dat.email}</td>
                   <td>{(dat.isAdmin && "True") || "False"}</td>
                   <td>{(dat.isOwner && "True") || "False"}</td>
+                  <td>{(dat.isValidated && "True") || "False"}</td>
                   <td>
                     <center>
                       <Button
@@ -199,6 +201,31 @@ const Reports = (props) => {
                   <td>{dat.ownerName}</td>
                   <td>{dat.ownerMailId}</td>
                   <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
+                  <td>{dat.stime}</td>
+                  <td>{dat.etime}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+
+        {isdriver && !isadmin && !isowner && pdata.length > 0 && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Sno</th>
+                <th>Place Name</th>
+
+                <th>Open Time</th>
+                <th>Close Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pdata.map((dat) => (
+                <tr>
+                  <td>{cnt2 && cnt2++}</td>
+                  <td>{dat.placeName}</td>
+
                   <td>{dat.stime}</td>
                   <td>{dat.etime}</td>
                 </tr>

@@ -1,5 +1,5 @@
 .seat {
-  width: 32px;
+  width: 39px;
   height: 40px;
   border-style: solid;
   border-width: 2px;
@@ -11,7 +11,7 @@
 }
 
 .seat:hover {
-  width: 34px;
+  width: 42px;
   height: 42px;
 
   background-color: rgb(43, 255, 0);
