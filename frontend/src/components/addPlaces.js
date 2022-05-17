@@ -29,6 +29,7 @@ const AddPlaces = () => {
   const [error, setError] = useState(false);
 
   let navigate = useNavigate();
+  const userInfo = localStorage.getItem("userInfo");
 
   const addingPlaces = async (e) => {
     e.preventDefault();
@@ -89,6 +90,7 @@ const AddPlaces = () => {
                 <Form.Label>Owner name</Form.Label>
                 <Form.Control
                   type="text"
+                  value={JSON.parse(userInfo).name}
                   placeholder="Owner name "
                   onChange={(e) => setOname(e.target.value)}
                 />
@@ -98,6 +100,7 @@ const AddPlaces = () => {
                 <Form.Control
                   type="email"
                   placeholder="Enter Mail id"
+                  value={JSON.parse(userInfo).email}
                   onChange={(e) => setOemail(e.target.value)}
                 />
               </Col>

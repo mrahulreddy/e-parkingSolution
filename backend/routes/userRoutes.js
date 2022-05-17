@@ -14,6 +14,7 @@ const {
   addPlace,
   getPlaces,
   updateNbs,
+  deletePlace,
 } = require("../controllers/placeController");
 const router = express.Router();
 
@@ -29,5 +30,6 @@ router.route("/removeAdmin").put(removeAdmin);
 router.route("/removeOwner").put(removeOwner);
 router.route("/requestOwner").put(requestOwner);
 router.route("/validate").put(validateUser);
+router.route("/deletePlace").put(deletePlace);
 
 module.exports = router;

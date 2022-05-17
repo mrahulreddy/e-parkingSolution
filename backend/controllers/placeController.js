@@ -9,7 +9,7 @@ const getPlaces = asyncHandler(async (req, res) => {
 const updateNbs = asyncHandler(async (req, res) => {
   const { placeName, nbs } = req.body;
 
-  const placeExists = await Place.findOne({ placeName });
+  const placeExists = await Place.findOne({ placeName: placeName });
 
   if (placeExists) {
     // console.log(placeExists);
@@ -17,6 +17,20 @@ const updateNbs = asyncHandler(async (req, res) => {
     placeExists.nbs = parseInt(placeExists.nbs) + parseInt(nbs);
     const updatedPlace = await placeExists.save();
     res.json(updatedPlace);
+  } else {
+    res.status(404);
+    throw new Error("Place Not exists");
+  }
+});
+
+const deletePlace = asyncHandler(async (req, res) => {
+  const { place } = req.body;
+  // console.log(place);
+  const placeExists = await Place.findOne({ placeName: place });
+
+  if (placeExists) {
+    placeExists.remove();
+    res.json("Successfully deleted");
   } else {
     res.status(404);
     throw new Error("Place Not exists");
@@ -54,4 +68,4 @@ const addPlace = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addPlace, getPlaces, updateNbs };
+module.exports = { addPlace, getPlaces, updateNbs, deletePlace };
