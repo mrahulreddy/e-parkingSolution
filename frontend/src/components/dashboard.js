@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [isowner, setIsowner] = useState(false);
   const [isdriver, setIsdriver] = useState(true);
   const [pdata, setpdata] = useState([]);
-
+  const symbol = "£";
   const get_place_data = async () => {
     const getplaces = await axios.get("/api/users/getplaces");
     setpdata(getplaces.data);
@@ -40,8 +40,8 @@ const Dashboard = () => {
     if (!isadmin && !isowner) get_place_data();
   }, [isadmin, isowner]);
 
-  function addplaces() { }
-  
+  function addplaces() {}
+
   // console.log('pdata', pdata)
 
   return (
@@ -66,7 +66,7 @@ const Dashboard = () => {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <AddPlaces />
+                  <AddPlaces symbol={symbol} />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
@@ -82,7 +82,11 @@ const Dashboard = () => {
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
                   {pdata.length > 0 && (
-                    <BookPlace pdata={pdata} get_place_data={get_place_data} />
+                    <BookPlace
+                      pdata={pdata}
+                      get_place_data={get_place_data}
+                      symbol={symbol}
+                    />
                   )}
                 </Card.Body>
               </Accordion.Collapse>

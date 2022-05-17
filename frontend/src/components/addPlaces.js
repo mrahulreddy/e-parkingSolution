@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Form,
@@ -17,7 +17,8 @@ import TimePicker from "react-time-picker";
 import SucessMessage from "./SucessMessage";
 import ErrorMessage from "./ErrorMessage";
 
-const AddPlaces = () => {
+const AddPlaces = (props) => {
+  const { symbol } = props;
   const [ownerMailId, setOemail] = useState("");
   const [ownerName, setOname] = useState("");
   const [placeName, setPname] = useState("");
@@ -69,7 +70,10 @@ const AddPlaces = () => {
       setError(error.response.data.message);
     }
   };
-
+  useEffect(() => {
+    setOname(JSON.parse(userInfo).name);
+    setOemail(JSON.parse(userInfo).email);
+  }, []);
   return (
     <div>
       <Container>
@@ -90,7 +94,11 @@ const AddPlaces = () => {
                 <Form.Label>Owner name</Form.Label>
                 <Form.Control
                   type="text"
-                  value={JSON.parse(userInfo).name}
+                  value={
+                    JSON.parse(userInfo).isAdmin
+                      ? ownerName
+                      : JSON.parse(userInfo).name
+                  }
                   placeholder="Owner name "
                   onChange={(e) => setOname(e.target.value)}
                 />
@@ -100,7 +108,11 @@ const AddPlaces = () => {
                 <Form.Control
                   type="email"
                   placeholder="Enter Mail id"
-                  value={JSON.parse(userInfo).email}
+                  value={
+                    JSON.parse(userInfo).isAdmin
+                      ? ownerMailId
+                      : JSON.parse(userInfo).email
+                  }
                   onChange={(e) => setOemail(e.target.value)}
                 />
               </Col>
@@ -134,7 +146,7 @@ const AddPlaces = () => {
                 />
               </Col>
               <Col>
-                <Form.Label>Amount Per Hour ($)</Form.Label>
+                <Form.Label>Amount Per Hour ({symbol})</Form.Label>
                 <Form.Control
                   type="text"
                   onChange={(e) => setAph(e.target.value)}

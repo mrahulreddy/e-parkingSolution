@@ -20,19 +20,22 @@ import SucessMessage from "./SucessMessage";
 import SeatMap from "./seatMap";
 
 const BookPlace = (props) => {
-  const { pdata, get_place_data } = props;
-  // const [pdata, setpdata] = useState([]);
+  const { pdata, get_place_data, symbol } = props;
+
+  const [bookingdata, setBookingdata] = useState([]);
   const [stime, setStime] = useState("10:00");
   const [nos, setNos] = useState("0");
   const [totalSeat, setTotalSeat] = useState(0);
   const [sdate, setSdate] = useState("");
   const [splace, setSplace] = useState("...");
-  const [rseat, setRseat] = useState("1");
+  const [rseat, setRseat] = useState(0);
+  const [amount, setAmount] = useState(0);
   const [rhrs, setRhrs] = useState("1");
   const [error, setError] = useState("");
   const [sucess, setSucess] = useState();
   const [bookedSeats, setBookedSeats] = useState("");
   const [bookedSeatcnt, setBookedSeatcnt] = useState(0);
+  const userInfo = localStorage.getItem("userInfo");
 
   const selectedSeat = (selSeat, status) => {
     if ("N" === status) {
@@ -68,13 +71,18 @@ const BookPlace = (props) => {
   function content() {
     let seatContent = [];
     var cnt = 0;
-    var total_seats = 15;
+    var total_seats = totalSeat;
 
     var seat_names = [];
-
-    for (let ac = 65; ac < 91; ac++) {
-      for (let index = 1; index < 11; index++) {
-        seat_names.push(String.fromCharCode(ac) + index + "|N");
+    var inc = 0;
+    for (let ac = 65, coun = 0; ac < 91 && coun < total_seats; ac++) {
+      for (let index = 1; index < 11 && coun < total_seats; index++, coun++) {
+        var seatname = (inc > 0 ? inc : "") + String.fromCharCode(ac) + index;
+        seat_names.push(seatname + "|N");
+      }
+      if (ac == 90) {
+        ac = 64;
+        inc++;
       }
     }
     var rows = total_seats / 10;
@@ -102,6 +110,7 @@ const BookPlace = (props) => {
               key={sn}
               style={{ background: clr }}
               onClick={() => selectedSeat(sn, status)}
+              title={sn}
             >
               {sn}
             </div>
@@ -113,13 +122,13 @@ const BookPlace = (props) => {
     return seatContent;
   }
 
-  // const get_place_data = async () => {
-  //   const { data } = await axios.get("/api/users/getplaces");
-  //   setpdata(data);
-  // };
+  const get_booking_data = async () => {
+    const { data } = await axios.get("/api/users/getBookings");
+    setBookingdata(data);
+  };
 
   const get_available_seat = async () => {
-    console.log(pdata, "pdata");
+    // console.log(pdata, "pdata");
 
     await pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
@@ -142,6 +151,22 @@ const BookPlace = (props) => {
       .getElementById("places-options")
       .addEventListener("change", function () {
         setSplace(this.value);
+        setNos(0);
+        setTotalSeat(0);
+        bookingdata.map((dat) => {
+          if (dat.placeName.toString() === this.value.toString()) {
+            setAmount(dat.aph);
+            setTotalSeat(dat.nos);
+            setNos(parseInt(dat.nos) - parseInt(dat.nbs));
+          }
+        });
+        pdata.map((dat) => {
+          if (dat.placeName.toString() === this.value.toString()) {
+            setAmount(dat.aph);
+            setTotalSeat(dat.nos);
+            setNos(parseInt(dat.nos) - parseInt(dat.nbs));
+          }
+        });
       });
 
     // get_place_data();
@@ -172,6 +197,38 @@ const BookPlace = (props) => {
         {
           placeName,
           nbs,
+        },
+        config
+      );
+      setSucess("Sucessfully Booked the place");
+      get_place_data();
+    } catch (error) {}
+  };
+
+  const bookSeats = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      var driverMailId = JSON.parse(userInfo).email;
+      var date = sdate;
+      var startTime = stime;
+      var totalHours = rhrs;
+      var place = splace;
+      var seats = place;
+      const { data } = await axios.put(
+        "/api/users/bookseats",
+        {
+          driverMailId,
+          date,
+          startTime,
+          totalHours,
+          place,
+          seats,
+          amount,
         },
         config
       );
@@ -228,7 +285,7 @@ const BookPlace = (props) => {
                 onChange={(e) => setRhrs(e.target.value)}
               />
             </Col>
-            <Col>
+            {/* <Col>
               <Form.Label>Number of slots</Form.Label>
               <Form.Control
                 type="text"
@@ -236,16 +293,20 @@ const BookPlace = (props) => {
                 value={rseat}
                 onChange={(e) => setRseat(e.target.value)}
               />
-            </Col>
+            </Col> */}
           </Row>
           <Row>
-            <Col>
+            {/* <Col>
               <Button variant="primary" onClick={get_available_seat}>
                 Check availablity
               </Button>
-            </Col>
+            </Col> */}
             <Col>
-              <Button variant="primary" type="submit">
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={bookedSeatcnt > 0 ? false : true}
+              >
                 Book Place
               </Button>
             </Col>
@@ -253,8 +314,8 @@ const BookPlace = (props) => {
           <br />
           <Row>
             <Form.Label>
-              Number of available space in {splace} on {sdate} at {stime} is
-              <h1 style={{ color: "red" }}>{nos}</h1>
+              Number of available space in {splace} on {sdate} at {stime} is{" "}
+              {nos} for {amount} {symbol} per/Hour
             </Form.Label>
           </Row>
         </Form>

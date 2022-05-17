@@ -108,16 +108,16 @@ const Reports = (props) => {
         },
       };
 
-      const { data } = await axios.put(
-        "/api/users/deletePlace",
-        {
-          place,
-        },
-        config
-      );
-      await get_place_data();
-
-      console.log(pdata2);
+      if (window.confirm("Are you sure to delete the place?")) {
+        const { data } = await axios.put(
+          "/api/users/deletePlace",
+          {
+            place,
+          },
+          config
+        );
+        await get_place_data();
+      }
     } catch (error) {
       console.log("error  ");
     }
@@ -224,6 +224,8 @@ const Reports = (props) => {
                 <th>Place created Date</th>
                 <th>Open Time</th>
                 <th>Close Time</th>
+                <th>Total Seats</th>
+                <th>Booked Seats</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -237,6 +239,8 @@ const Reports = (props) => {
                   <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
                   <td>{dat.stime}</td>
                   <td>{dat.etime}</td>
+                  <td>{dat.nos}</td>
+                  <td>{dat.nbs}</td>
                   <td>
                     <center>
                       <Button
@@ -265,6 +269,8 @@ const Reports = (props) => {
                 <th>Place created Date</th>
                 <th>Open Time</th>
                 <th>Close Time</th>
+                <th>Total Seats</th>
+                <th>Booked Seats</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -280,6 +286,8 @@ const Reports = (props) => {
                       <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
                       <td>{dat.stime}</td>
                       <td>{dat.etime}</td>
+                      <td>{dat.nos}</td>
+                      <td>{dat.nbs}</td>
                       <td>
                         <center>
                           <Button

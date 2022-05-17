@@ -16,6 +16,7 @@ const {
   updateNbs,
   deletePlace,
 } = require("../controllers/placeController");
+const { addBooking } = require("../controllers/bookingController");
 const router = express.Router();
 
 router.route("/").post(registerUser);
@@ -31,5 +32,6 @@ router.route("/removeOwner").put(removeOwner);
 router.route("/requestOwner").put(requestOwner);
 router.route("/validate").put(validateUser);
 router.route("/deletePlace").put(deletePlace);
+router.route("/bookseats").put(addBooking);
 
 module.exports = router;
