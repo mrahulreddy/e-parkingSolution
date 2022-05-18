@@ -25,7 +25,7 @@ const AddPlaces = (props) => {
   const [nos, setNos] = useState("");
   const [aph, setAph] = useState("");
   const [stime, setStime] = useState("00:00");
-  const [etime, setEtime] = useState("24:00");
+  const [etime, setEtime] = useState("23:00");
   const [sucess, setSucess] = useState();
   const [error, setError] = useState(false);
 
@@ -94,11 +94,7 @@ const AddPlaces = (props) => {
                 <Form.Label>Owner name</Form.Label>
                 <Form.Control
                   type="text"
-                  value={
-                    JSON.parse(userInfo).isAdmin
-                      ? ownerName
-                      : JSON.parse(userInfo).name
-                  }
+                  value={ownerName}
                   placeholder="Owner name "
                   onChange={(e) => setOname(e.target.value)}
                 />
@@ -108,11 +104,7 @@ const AddPlaces = (props) => {
                 <Form.Control
                   type="email"
                   placeholder="Enter Mail id"
-                  value={
-                    JSON.parse(userInfo).isAdmin
-                      ? ownerMailId
-                      : JSON.parse(userInfo).email
-                  }
+                  value={ownerMailId}
                   onChange={(e) => setOemail(e.target.value)}
                 />
               </Col>

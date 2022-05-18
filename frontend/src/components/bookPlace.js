@@ -1,4 +1,5 @@
 import "./seatMap.css";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
   Col,
@@ -23,8 +24,12 @@ const BookPlace = (props) => {
   const { pdata, get_place_data, symbol } = props;
 
   const [bookingdata, setBookingdata] = useState([]);
+  const [oldbookedSeats, setOldBookedSeats] = useState("");
+  var oldredseats = "";
+  var redSeatcount = 0;
   const [stime, setStime] = useState("10:00");
   const [nos, setNos] = useState("0");
+  const [nbs, setNbs] = useState("0");
   const [totalSeat, setTotalSeat] = useState(0);
   const [sdate, setSdate] = useState("");
   const [splace, setSplace] = useState("...");
@@ -74,11 +79,38 @@ const BookPlace = (props) => {
     var total_seats = totalSeat;
 
     var seat_names = [];
+    var old_boked_seats = [];
+    try {
+      old_boked_seats = oldbookedSeats.split(",");
+      console.log(old_boked_seats, "No error in split");
+      console.log(oldredseats, "oldredseats");
+    } catch (error) {
+      old_boked_seats = [","];
+      console.log("error in split");
+    }
+    console.log(old_boked_seats, "old_boked_seats in content");
     var inc = 0;
     for (let ac = 65, coun = 0; ac < 91 && coun < total_seats; ac++) {
       for (let index = 1; index < 11 && coun < total_seats; index++, coun++) {
         var seatname = (inc > 0 ? inc : "") + String.fromCharCode(ac) + index;
-        seat_names.push(seatname + "|N");
+
+        var notfound = true;
+        for (
+          let index1 = 0;
+          index1 < old_boked_seats.length && notfound;
+          index1++
+        ) {
+          if (seatname === old_boked_seats[index1]) {
+            seat_names.push(seatname + "|Y");
+            notfound = false;
+            redSeatcount++;
+            // setNbs(redSeatcount);
+          }
+        }
+
+        if (notfound) {
+          seat_names.push(seatname + "|N");
+        }
       }
       if (ac == 90) {
         ac = 64;
@@ -122,54 +154,66 @@ const BookPlace = (props) => {
     return seatContent;
   }
 
-  const get_booking_data = async () => {
-    const { data } = await axios.get("/api/users/getBookings");
-    setBookingdata(data);
+  const get_booking_data = async (e) => {
+    const getbookinginfo = await axios.get("/api/users/getBookings");
+    setBookingdata(getbookinginfo.data);
+    console.log("path1");
+    console.log(bookingdata);
+    console.log("path1.1");
+    // bookingdata.map((dat) => {
+    //   console.log(dat.seats, "dat.seats outer");
+    //   oldredseats = oldredseats + "," + dat.seats.toString();
+    // });
+
+    var firsttime = true;
+    var arrtime = stime.split(":");
+    bookingdata.map((dat) => {
+      if (dat.place.toString() === splace.toString()) {
+        console.log(dat.seats, "dat.seats ");
+
+        for (let index = 0; index < rhrs; index++) {
+          if (dat.startTime == parseInt(arrtime[0]) + index) {
+            oldredseats = oldredseats + "," + dat.seats.toString();
+            console.log(oldredseats, "in old red");
+            setOldBookedSeats(oldredseats);
+          }
+        }
+      }
+    });
+
+    console.log(oldbookedSeats, "oldbookedSeats inner");
   };
 
-  const get_available_seat = async () => {
-    // console.log(pdata, "pdata");
-
-    await pdata.map((dat) => {
+  const get_available_seat = async (e) => {
+    e.preventDefault();
+    setSucess(false);
+    setOldBookedSeats("");
+    await get_booking_data(e);
+    console.log("path2");
+    pdata.map((dat) => {
       if (dat.placeName.toString() === splace.toString()) {
-        setTotalSeat(parseInt(dat.nos));
-        setNos(parseInt(dat.nos) - parseInt(dat.nbs));
-
-        if (parseInt(dat.nos) - parseInt(dat.nbs) - parseInt(rseat) < 0) {
-          setError("Required seat not available");
-        } else {
-          setError(false);
-        }
-      } else {
+        setAmount(dat.aph);
+        setTotalSeat(dat.nos);
+        setNbs(redSeatcount);
+        setNos(parseInt(dat.nos) - redSeatcount);
       }
     });
   };
 
   useEffect(() => {
+    get_booking_data();
     setError(false);
+    setSucess(false);
     document
       .getElementById("places-options")
       .addEventListener("change", function () {
         setSplace(this.value);
         setNos(0);
         setTotalSeat(0);
-        bookingdata.map((dat) => {
-          if (dat.placeName.toString() === this.value.toString()) {
-            setAmount(dat.aph);
-            setTotalSeat(dat.nos);
-            setNos(parseInt(dat.nos) - parseInt(dat.nbs));
-          }
-        });
-        pdata.map((dat) => {
-          if (dat.placeName.toString() === this.value.toString()) {
-            setAmount(dat.aph);
-            setTotalSeat(dat.nos);
-            setNos(parseInt(dat.nos) - parseInt(dat.nbs));
-          }
-        });
       });
 
-    // get_place_data();
+    // get_booking_data();
+
     var date3 = new Date();
 
     const datestr =
@@ -213,12 +257,14 @@ const BookPlace = (props) => {
           "Content-type": "application/json",
         },
       };
+
+      var arrtime = stime.split(":");
       var driverMailId = JSON.parse(userInfo).email;
       var date = sdate;
-      var startTime = stime;
+      var startTime = arrtime[0];
       var totalHours = rhrs;
       var place = splace;
-      var seats = place;
+      var seats = bookedSeats;
       const { data } = await axios.put(
         "/api/users/bookseats",
         {
@@ -233,7 +279,7 @@ const BookPlace = (props) => {
         config
       );
       setSucess("Sucessfully Booked the place");
-      get_place_data();
+      get_place_data(e);
     } catch (error) {}
   };
 
@@ -254,7 +300,7 @@ const BookPlace = (props) => {
   return (
     <div>
       <Container>
-        <Form onSubmit={bookPlaces}>
+        <Form>
           {error && <ErrorMessage message={error} />}
           {sucess && <SucessMessage message={sucess} />}
           <select name="places" id="places-options">
@@ -296,16 +342,16 @@ const BookPlace = (props) => {
             </Col> */}
           </Row>
           <Row>
-            {/* <Col>
+            <Col>
               <Button variant="primary" onClick={get_available_seat}>
                 Check availablity
               </Button>
-            </Col> */}
+            </Col>
             <Col>
               <Button
                 variant="primary"
-                type="submit"
                 disabled={bookedSeatcnt > 0 ? false : true}
+                onClick={bookSeats}
               >
                 Book Place
               </Button>
@@ -314,28 +360,45 @@ const BookPlace = (props) => {
           <br />
           <Row>
             <Form.Label>
-              Number of available space in {splace} on {sdate} at {stime} is{" "}
-              {nos} for {amount} {symbol} per/Hour
+              Number of available space in{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{splace} </u>on{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{moment(sdate).format("MM/DD/YYYY")}</u> at{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{stime}</u> is{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{nos}</u> for{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                {amount} {symbol}
+              </u>{" "}
+              per/Hour
             </Form.Label>
           </Row>
         </Form>
         <div>
+
           {/* <Table borderless> */}
           <Table borderless size="sm">
             {/* <Table hover size="sm"> */}
             <thead>
-              <tr>
+
+          <tr>
                 <th colSpan={10}>
                   <center>
-                    Available Seats<hr></hr>
+                  <hr></hr>Available Seats
                   </center>
                 </th>
               </tr>
+              <tr>
+                <th colSpan={10}>
+                  {/* <center> */}
+                  Selected booking slots are: {bookedSeats} | Total Seats :{" "}
+          {bookedSeatcnt}<hr></hr>
+                  {/* </center> */}
+                </th>
+              </tr>
             </thead>
+
             {content()}
           </Table>
-          Selected booking slots are: {bookedSeats} | Total Seats :{" "}
-          {bookedSeatcnt}
+
         </div>
       </Container>
     </div>

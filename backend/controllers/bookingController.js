@@ -1,10 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const Booking = require("../models/bookingModel");
 
+const getbookings = asyncHandler(async (req, res) => {
+  const alldata = await Booking.find();
+  res.json(alldata);
+});
+
 const addBooking = asyncHandler(async (req, res) => {
-  const { driverMailId, date, startTime, totalHours, place, seats, amount } =
+  var { driverMailId, date, startTime, totalHours, place, seats, amount } =
     req.body;
-  var endTime = startTime + 1;
+  var endTime = parseInt(startTime) + 1;
   var success = false;
   for (let index = 0; index < totalHours; index++) {
     const booking = await Booking.create({
@@ -16,10 +21,9 @@ const addBooking = asyncHandler(async (req, res) => {
       seats,
       amount,
     });
-
     success = true;
     startTime = endTime;
-    endTime = startTime + 1;
+    endTime = parseInt(startTime) + 1;
   }
 
   if (success) {
@@ -30,4 +34,18 @@ const addBooking = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addBooking };
+const deleteBooking = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+  // console.log(place);
+  const bookingExists = await Booking.findOne({ _id: id });
+
+  if (bookingExists) {
+    bookingExists.remove();
+    res.json("Successfully removed the booking");
+  } else {
+    res.status(404);
+    throw new Error("Booking Not exists");
+  }
+});
+
+module.exports = { addBooking, getbookings, deleteBooking };

@@ -6,6 +6,7 @@ import { Button, Col, Container, Row, Table } from "react-bootstrap";
 const Reports = (props) => {
   const { pdata } = props;
   const [pdata2, setPdata2] = useState([]);
+  const [bookdata, setBookingdata] = useState([]);
   const [uid, setUserid] = useState("");
   const [isadmin, setIsadmin] = useState(false);
   const [isowner, setIsowner] = useState(false);
@@ -14,9 +15,15 @@ const Reports = (props) => {
   const [suser, setSuser] = useState([]);
   var cnt = 1;
   var cnt2 = 1;
+  var cnt3 = 1;
   const get_users_data = async () => {
     const { data } = await axios.get("/api/users/getusers");
     setUdata(data);
+  };
+
+  const get_booking_data = async () => {
+    const { data } = await axios.get("/api/users/getBookings");
+    setBookingdata(data);
   };
 
   const get_place_data = async () => {
@@ -123,6 +130,30 @@ const Reports = (props) => {
     }
   };
 
+  const deleteBooking = async (id) => {
+    console.log(id, "id");
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      if (window.confirm("Are you sure to delete the Booking ?")) {
+        const { data } = await axios.put(
+          "/api/users/deleteBooking",
+          {
+            id,
+          },
+          config
+        );
+        await get_booking_data();
+      }
+    } catch (error) {
+      console.log("error  ");
+    }
+  };
+
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     setIsadmin(JSON.parse(userInfo).isAdmin);
@@ -132,12 +163,13 @@ const Reports = (props) => {
     get_users_data();
     setPdata2(pdata);
     get_place_data();
+    get_booking_data();
   }, []);
 
   return (
     <div>
       <Container>
-        <h5>
+        {/* <h5>
           {isadmin && (
             <u>
               <center>{"User Data "}</center>
@@ -148,10 +180,15 @@ const Reports = (props) => {
               <center>{"Booked Places"}</center>
             </u>
           )}
-        </h5>
+        </h5> */}
         {isadmin && (
           <Table striped bordered hover size="sm">
             <thead>
+              <tr>
+                <th colSpan={6}>
+                  <center>User Data</center>
+                </th>
+              </tr>
               <tr>
                 <th>Sno</th>
                 <th>Name</th>
@@ -217,6 +254,11 @@ const Reports = (props) => {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
+                <th colSpan={10}>
+                  <center>Place Details</center>
+                </th>
+              </tr>
+              <tr>
                 <th>Sno</th>
                 <th>Place Name</th>
                 <th>Owner Name</th>
@@ -262,6 +304,11 @@ const Reports = (props) => {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
+                <th colSpan={10}>
+                  <center>Place Details</center>
+                </th>
+              </tr>
+              <tr>
                 <th>Sno</th>
                 <th>Place Name</th>
                 <th>Owner Name</th>
@@ -306,26 +353,104 @@ const Reports = (props) => {
           </Table>
         )}
 
-        {isdriver && !isadmin && !isowner && pdata2.length > 0 && (
+        {isadmin && bookdata.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
+                <th colSpan={9}>
+                  <center>Booking History</center>
+                </th>
+              </tr>
+              <tr>
                 <th>Sno</th>
                 <th>Place Name</th>
-                <th>Open Time</th>
-                <th>Close Time</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>User MailId</th>
+                <th>Booked Seats</th>
+                <th>Booking Time</th>
+                <th>Amount per/Hour</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {pdata2.map((dat) => (
+              {bookdata.map((dat) => (
                 <tr>
-                  <td>{cnt2 && cnt2++}</td>
-                  <td>{dat.placeName}</td>
-
-                  <td>{dat.stime}</td>
-                  <td>{dat.etime}</td>
+                  <td>{cnt3 && cnt3++}</td>
+                  <td>{dat.place}</td>
+                  <td>{dat.startTime + ":00"}</td>
+                  <td>{dat.endTime + ":00"}</td>
+                  <td>{dat.driverMailId}</td>
+                  <td>{dat.seats}</td>
+                  {/* <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td> */}
+                  <td>
+                    {moment(dat.createdAt).format("YYYY/MMM/DD - hh:mm:ss")}
+                  </td>
+                  <td>{dat.amount}</td>
+                  <td>
+                    <center>
+                      <Button
+                        variant="danger"
+                        onClick={() => deleteBooking(dat._id)}
+                        size="sm"
+                      >
+                        Delete Booking
+                      </Button>
+                    </center>
+                  </td>
                 </tr>
               ))}
+            </tbody>
+          </Table>
+        )}
+
+        {isdriver && !isadmin && bookdata.length > 0 && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th colSpan={9}>
+                  <center>Booking History</center>
+                </th>
+              </tr>
+              <tr>
+                <th>Sno</th>
+                <th>Place Name</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>User MailId</th>
+                <th>Booked Seats</th>
+                <th>Booking Time</th>
+                <th>Amount per/Hour</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookdata.map(
+                (dat) =>
+                  dat.driverMailId == uid.toString() && (
+                    <tr>
+                      <td>{cnt3 && cnt3++}</td>
+                      <td>{dat.place}</td>
+                      <td>{dat.startTime + ":00"}</td>
+                      <td>{dat.endTime + ":00"}</td>
+                      <td>{dat.driverMailId}</td>
+                      <td>{dat.seats}</td>
+                      <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
+                      <td>{dat.amount}</td>
+                      <td>
+                        <center>
+                          <Button
+                            variant="danger"
+                            onClick={() => deleteBooking(dat._id)}
+                            size="sm"
+                          >
+                            Delete Booking
+                          </Button>
+                        </center>
+                      </td>
+                    </tr>
+                  )
+              )}
             </tbody>
           </Table>
         )}
