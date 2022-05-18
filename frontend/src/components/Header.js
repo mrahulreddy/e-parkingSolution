@@ -12,10 +12,9 @@ import { Link } from "react-router-dom";
 const clearuserInfo = () => {
   localStorage.removeItem("userInfo");
 };
-console.log('HHHHHHHHHHHHHHHHHHHHHHH')
+console.log("HHHHHHHHHHHHHHHHHHHHHHH");
 
 const Header = () => {
-
   const [logout, setLogOut] = useState(localStorage.getItem("userInfo"));
 
   return (
@@ -37,10 +36,15 @@ const Header = () => {
             <Nav.Link>
               <Link to="/">About Us</Link>
             </Nav.Link>
-
+            <Nav.Link>
+              <Link to="/dashboard">Dashboard</Link>
+            </Nav.Link>
             <NavDropdown title="More" id="navbarScrollingDropdown">
               <NavDropdown.Item>
                 <Link to="/">User FAQ's</Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/wallet">Add Money</Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
                 <Link to="/">Enroll as LandOwner</Link>
@@ -51,10 +55,12 @@ const Header = () => {
               </NavDropdown.Item>
             </NavDropdown>
             {logout && (
-              <Nav.Link onClick={() => {
-                localStorage.removeItem("userInfo");
-                setLogOut(localStorage.getItem("userInfo"));
-              }}>
+              <Nav.Link
+                onClick={() => {
+                  localStorage.removeItem("userInfo");
+                  setLogOut(localStorage.getItem("userInfo"));
+                }}
+              >
                 <Link to="/">Logout </Link>
               </Nav.Link>
             )}

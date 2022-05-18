@@ -27,6 +27,7 @@ const BookPlace = (props) => {
   const [oldbookedSeats, setOldBookedSeats] = useState("");
   var oldredseats = "";
   var redSeatcount = 0;
+  var paymentSucess = false;
   const [stime, setStime] = useState("10:00");
   const [nos, setNos] = useState("0");
   const [nbs, setNbs] = useState("0");
@@ -187,7 +188,10 @@ const BookPlace = (props) => {
   const get_available_seat = async (e) => {
     e.preventDefault();
     setSucess(false);
+    setError(false);
     setOldBookedSeats("");
+    setBookedSeats("");
+    setBookedSeatcnt(0);
     await get_booking_data(e);
     console.log("path2");
     pdata.map((dat) => {
@@ -249,8 +253,52 @@ const BookPlace = (props) => {
     } catch (error) {}
   };
 
+  const makeBookingPayment = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      var driverMailId = JSON.parse(userInfo).email,
+        description =
+          "Payment for " + splace + " " + bookedSeatcnt + " parking spaces",
+        transactionAmount = parseInt(amount) * parseInt(bookedSeatcnt),
+        debitType = "debit";
+      if (
+        window.confirm(
+          "Please confirm the \n" +
+            description +
+            "\n Amount =" +
+            transactionAmount
+        )
+      ) {
+        const { data } = await axios.put(
+          "/api/users/addMoney",
+          {
+            driverMailId,
+            description,
+            transactionAmount,
+            debitType,
+          },
+          config
+        );
+        console.log("true after add money");
+        paymentSucess = true;
+      } else {
+        paymentSucess = false;
+      }
+    } catch (err) {
+      setError(err.response.data.message);
+      paymentSucess = false;
+    }
+  };
+
   const bookSeats = async (e) => {
     e.preventDefault();
+    setError(false);
     try {
       const config = {
         headers: {
@@ -265,22 +313,32 @@ const BookPlace = (props) => {
       var totalHours = rhrs;
       var place = splace;
       var seats = bookedSeats;
-      const { data } = await axios.put(
-        "/api/users/bookseats",
-        {
-          driverMailId,
-          date,
-          startTime,
-          totalHours,
-          place,
-          seats,
-          amount,
-        },
-        config
-      );
-      setSucess("Sucessfully Booked the place");
-      get_place_data(e);
-    } catch (error) {}
+
+      await makeBookingPayment(e);
+      console.log(paymentSucess, "payment status");
+      if (paymentSucess) {
+        const { data } = await axios.put(
+          "/api/users/bookseats",
+          {
+            driverMailId,
+            date,
+            startTime,
+            totalHours,
+            place,
+            seats,
+            amount,
+          },
+          config
+        );
+
+        setSucess("Sucessfully Booked the place");
+        setError(false);
+        get_place_data(e);
+      }
+    } catch (err) {}
+
+    setBookedSeats("");
+    setBookedSeatcnt(0);
   };
 
   const getSelectedDate = async (date) => {
@@ -362,9 +420,11 @@ const BookPlace = (props) => {
             <Form.Label>
               Number of available space in{" "}
               <u style={{ color: "#2b87e3", fontSize: "20px" }}>{splace} </u>on{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{moment(sdate).format("MM/DD/YYYY")}</u> at{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{stime}</u> is{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{nos}</u> for{" "}
+              <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                {moment(sdate).format("MM/DD/YYYY")}
+              </u>{" "}
+              at <u style={{ color: "#2b87e3", fontSize: "20px" }}>{stime}</u>{" "}
+              is <u style={{ color: "#2b87e3", fontSize: "20px" }}>{nos}</u> for{" "}
               <u style={{ color: "#2b87e3", fontSize: "20px" }}>
                 {amount} {symbol}
               </u>{" "}
@@ -373,16 +433,14 @@ const BookPlace = (props) => {
           </Row>
         </Form>
         <div>
-
           {/* <Table borderless> */}
           <Table borderless size="sm">
             {/* <Table hover size="sm"> */}
             <thead>
-
-          <tr>
+              <tr>
                 <th colSpan={10}>
                   <center>
-                  <hr></hr>Available Seats
+                    <hr></hr>Available Seats
                   </center>
                 </th>
               </tr>
@@ -390,7 +448,8 @@ const BookPlace = (props) => {
                 <th colSpan={10}>
                   {/* <center> */}
                   Selected booking slots are: {bookedSeats} | Total Seats :{" "}
-          {bookedSeatcnt}<hr></hr>
+                  {bookedSeatcnt}
+                  <hr></hr>
                   {/* </center> */}
                 </th>
               </tr>
@@ -398,7 +457,6 @@ const BookPlace = (props) => {
 
             {content()}
           </Table>
-
         </div>
       </Container>
     </div>

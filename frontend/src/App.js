@@ -7,6 +7,7 @@ import Login from "./components/login";
 import Signup from "./components/signup";
 import { ContactUs } from "./components/contactus";
 import Validation from "./components/validation";
+import Ewallet from "./components/ewallet";
 
 const App = () => (
   <BrowserRouter>
@@ -18,6 +19,7 @@ const App = () => (
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/signup/validation" element={<Validation />} />
+        <Route path="/wallet" element={<Ewallet />} />
       </Routes>
     </main>
 

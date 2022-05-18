@@ -6,6 +6,7 @@ import { Button, Col, Container, Row, Table } from "react-bootstrap";
 const Reports = (props) => {
   const { pdata } = props;
   const [pdata2, setPdata2] = useState([]);
+  const [depositdata, setDepositdata] = useState([]);
   const [bookdata, setBookingdata] = useState([]);
   const [uid, setUserid] = useState("");
   const [isadmin, setIsadmin] = useState(false);
@@ -16,6 +17,7 @@ const Reports = (props) => {
   var cnt = 1;
   var cnt2 = 1;
   var cnt3 = 1;
+  var cnt4 = 1;
   const get_users_data = async () => {
     const { data } = await axios.get("/api/users/getusers");
     setUdata(data);
@@ -31,6 +33,10 @@ const Reports = (props) => {
     setPdata2(getplaces.data);
   };
 
+  const get_deposit_data = async () => {
+    const getdeposits = await axios.get("/api/users/getDepositHistory");
+    setDepositdata(getdeposits.data);
+  };
   const addAsAdmin = async (email) => {
     try {
       const config = {
@@ -164,6 +170,7 @@ const Reports = (props) => {
     setPdata2(pdata);
     get_place_data();
     get_booking_data();
+    get_deposit_data();
   }, []);
 
   return (
@@ -186,7 +193,9 @@ const Reports = (props) => {
             <thead>
               <tr>
                 <th colSpan={6}>
-                  <center>User Data</center>
+                  <center>
+                    <div onClick={get_users_data}> User Data ⟳</div>
+                  </center>
                 </th>
               </tr>
               <tr>
@@ -255,7 +264,9 @@ const Reports = (props) => {
             <thead>
               <tr>
                 <th colSpan={10}>
-                  <center>Place Details</center>
+                  <center>
+                    <div onClick={get_place_data}> Place Details ⟳</div>
+                  </center>
                 </th>
               </tr>
               <tr>
@@ -299,13 +310,14 @@ const Reports = (props) => {
             </tbody>
           </Table>
         )}
-
         {!isadmin && isowner && pdata2.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
                 <th colSpan={10}>
-                  <center>Place Details</center>
+                  <center>
+                    <div onClick={get_place_data}> Place Details ⟳</div>
+                  </center>
                 </th>
               </tr>
               <tr>
@@ -352,13 +364,14 @@ const Reports = (props) => {
             </tbody>
           </Table>
         )}
-
         {isadmin && bookdata.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
                 <th colSpan={9}>
-                  <center>Booking History</center>
+                  <center>
+                    <div onClick={get_booking_data}> Booking History ⟳</div>
+                  </center>
                 </th>
               </tr>
               <tr>
@@ -383,9 +396,7 @@ const Reports = (props) => {
                   <td>{dat.driverMailId}</td>
                   <td>{dat.seats}</td>
                   {/* <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td> */}
-                  <td>
-                    {moment(dat.createdAt).format("YYYY/MMM/DD - hh:mm:ss")}
-                  </td>
+                  <td>{moment(dat.createdAt).format("YYYYMMDD - hh:mm:ss")}</td>
                   <td>{dat.amount}</td>
                   <td>
                     <center>
@@ -403,13 +414,14 @@ const Reports = (props) => {
             </tbody>
           </Table>
         )}
-
         {isdriver && !isadmin && bookdata.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
                 <th colSpan={9}>
-                  <center>Booking History</center>
+                  <center>
+                    <div onClick={get_booking_data}> Booking History ⟳</div>
+                  </center>
                 </th>
               </tr>
               <tr>
@@ -447,6 +459,91 @@ const Reports = (props) => {
                             Delete Booking
                           </Button>
                         </center>
+                      </td>
+                    </tr>
+                  )
+              )}
+            </tbody>
+          </Table>
+        )}
+
+        {isadmin && depositdata.length > 0 && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th colSpan={7}>
+                  <center>
+                    {" "}
+                    <div flex onClick={get_deposit_data}>
+                      E-Wallet History ⟳
+                    </div>
+                  </center>
+                </th>
+              </tr>
+              <tr>
+                <th>Sno</th>
+                <th>User Mailid</th>
+                <th>Description</th>
+                <th>Transaction Amount</th>
+                <th>ClosingBlance</th>
+                <th>Debit Type</th>
+                <th>Transation Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {depositdata.map((dat) => (
+                <tr>
+                  <td>{cnt4 && cnt4++}</td>
+                  <td>{dat.driverMailId}</td>
+                  <td>{dat.description}</td>
+                  <td>{dat.transactionAmount}</td>
+                  <td>{dat.closingBlance}</td>
+                  <td>{dat.debitType}</td>
+                  {/* <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td> */}
+                  <td>{moment(dat.createdAt).format("YYYYMMDD - hh:mm:ss")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+
+        {!isadmin && isdriver && depositdata.length > 0 && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th colSpan={7}>
+                  <center>
+                    {" "}
+                    <div flex onClick={get_deposit_data}>
+                      E-Wallet History ⟳
+                    </div>
+                  </center>
+                </th>
+              </tr>
+              <tr>
+                <th>Sno</th>
+                <th>User Mailid</th>
+                <th>Description</th>
+                <th>Transaction Amount</th>
+                <th>ClosingBlance</th>
+                <th>Debit Type</th>
+                <th>Transation Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {depositdata.map(
+                (dat) =>
+                  dat.driverMailId == uid.toString() && (
+                    <tr>
+                      <td>{cnt4 && cnt4++}</td>
+                      <td>{dat.driverMailId}</td>
+                      <td>{dat.description}</td>
+                      <td>{dat.transactionAmount}</td>
+                      <td>{dat.closingBlance}</td>
+                      <td>{dat.debitType}</td>
+                      {/* <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td> */}
+                      <td>
+                        {moment(dat.createdAt).format("YYYYMMDD - hh:mm:ss")}
                       </td>
                     </tr>
                   )
