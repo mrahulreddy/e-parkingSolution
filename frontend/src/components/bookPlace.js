@@ -276,7 +276,7 @@ const BookPlace = (props) => {
         )
       ) {
         const { data } = await axios.put(
-          "/api/users/addMoney",
+          "/api/users/moneytransaction",
           {
             driverMailId,
             description,

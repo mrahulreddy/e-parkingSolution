@@ -21,7 +21,12 @@ const {
   getbookings,
   deleteBooking,
 } = require("../controllers/bookingController");
-const { addWallet, getWalletData } = require("../controllers/walletController");
+const {
+  getWalletData,
+  addMoney,
+
+  transactMoney,
+} = require("../controllers/walletController");
 const router = express.Router();
 
 router.route("/").post(registerUser);
@@ -40,6 +45,7 @@ router.route("/deletePlace").put(deletePlace);
 router.route("/bookseats").put(addBooking);
 router.route("/getBookings").get(getbookings);
 router.route("/deleteBooking").put(deleteBooking);
-router.route("/addMoney").put(addWallet);
+router.route("/addMoney").post(addMoney);
+router.route("/moneytransaction").put(transactMoney);
 router.route("/getDepositHistory").get(getWalletData);
 module.exports = router;
