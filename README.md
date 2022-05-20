@@ -4,10 +4,12 @@ This project is bootstrapped with [Create React App](https://github.com/facebook
 
 ## Available Scripts
 
-To get started in this project directory, the following two commands are to be executed sequentially:
+To get started in this project directory, the following commands are to be executed sequentially:
+
+Open a terminal at the location you clone this repository.
 
 
-### `npm install`
+### `npm install` Run this command
 
 This installs all the project dependencies\
 
@@ -20,3 +22,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+UPDATE README
