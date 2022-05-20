@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import ErrorMessage from "./ErrorMessage";
 import Header from "./Header";
 import SucessMessage from "./SucessMessage";
-
+import "./ewallet.css";
 const Ewallet = () => {
   const [amount, setAmount] = useState(0);
   const [confirmAmount, setConfirmAmount] = useState(0);
@@ -103,38 +103,41 @@ const Ewallet = () => {
     <div>
       {" "}
       <Header />
-      <Container>
-        {error && <ErrorMessage message={error} />}
-        {sucess && <SucessMessage message={sucess} />}
-        <Form ref={form}>
-          <Form.Label>Deposit Amount</Form.Label>
-          <Form.Control
-            type="text"
-            value={amount}
-            placeholder="Enter amount"
-            onChange={(e) => setAmount(e.target.value)}
-          />
+      <div class="ewallet">
+        <Container>
+          <h1>Payment portal</h1>
+          {error && <ErrorMessage message={error} />}
+          {sucess && <SucessMessage message={sucess} />}
+          <Form ref={form}>
+            <Form.Label>Deposit Amount</Form.Label>
+            <Form.Control
+              type="text"
+              value={amount}
+              placeholder="Enter amount"
+              onChange={(e) => setAmount(e.target.value)}
+            />
 
-          <Form.Label>Confirm Deposit Amount</Form.Label>
-          <Form.Control
-            type="text"
-            value={confirmAmount}
-            placeholder="Confirm amount "
-            onChange={(e) => setConfirmAmount(e.target.value)}
-          />
+            <Form.Label>Confirm Deposit Amount</Form.Label>
+            <Form.Control
+              type="text"
+              value={confirmAmount}
+              placeholder="Confirm amount "
+              onChange={(e) => setConfirmAmount(e.target.value)}
+            />
 
-          <br></br>
+            <br></br>
 
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={addDeposit}
-            disabled={amount > 0 && confirmAmount > 0 ? false : true}
-          >
-            Deposit
-          </Button>
-        </Form>
-      </Container>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={addDeposit}
+              disabled={amount > 0 && confirmAmount > 0 ? false : true}
+            >
+              Deposit
+            </Button>
+          </Form>
+        </Container>
+      </div>
     </div>
   );
 };

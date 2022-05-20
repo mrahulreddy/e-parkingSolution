@@ -47,81 +47,84 @@ const Dashboard = () => {
   return (
     <div>
       <Header />
-      <Container>
-        <h1>
-          <center>
-            {isadmin && "Admin "}
-            {isowner && !isadmin && "Landowner "}
-            {!isadmin && !isowner && "Driver "}
-            Dashboard
-          </center>
-        </h1>
-      </Container>
-      <Container>
-        {(isadmin || isowner) && (
+
+      <div class="dashboard">
+        <Container>
+          <h1>
+            <center>
+              {isadmin && "Admin "}
+              {isowner && !isadmin && "Landowner "}
+              {!isadmin && !isowner && "Driver "}
+              Dashboard
+            </center>
+          </h1>
+        </Container>
+        <Container>
+          {(isadmin || isowner) && (
+            <Accordion>
+              <Card>
+                <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
+                  <Card.Header> Add Places :</Card.Header>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <AddPlaces symbol={symbol} />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          )}
+
+          {(isadmin || (!isadmin && !isowner)) && (
+            <Accordion>
+              <Card>
+                <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
+                  <Card.Header> Book Places :</Card.Header>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    {pdata.length > 0 && (
+                      <BookPlace
+                        pdata={pdata}
+                        get_place_data={get_place_data}
+                        symbol={symbol}
+                      />
+                    )}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          )}
+
+          {isadmin && (
+            <Accordion>
+              <Card>
+                <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
+                  <Card.Header> Add Admin :</Card.Header>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <AddAdmin />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          )}
+
           <Accordion>
             <Card>
               <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
-                <Card.Header> Add Places :</Card.Header>
+                <Card.Header> Reports :</Card.Header>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <AddPlaces symbol={symbol} />
+                  <Reports pdata={pdata} />
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
-        )}
-
-        {(isadmin || (!isadmin && !isowner)) && (
-          <Accordion>
-            <Card>
-              <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
-                <Card.Header> Book Places :</Card.Header>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  {pdata.length > 0 && (
-                    <BookPlace
-                      pdata={pdata}
-                      get_place_data={get_place_data}
-                      symbol={symbol}
-                    />
-                  )}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        )}
-
-        {isadmin && (
-          <Accordion>
-            <Card>
-              <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
-                <Card.Header> Add Admin :</Card.Header>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <AddAdmin />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        )}
-
-        <Accordion>
-          <Card>
-            <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
-              <Card.Header> Reports :</Card.Header>
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey="0">
-              <Card.Body>
-                <Reports pdata={pdata} />
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 };

@@ -62,7 +62,7 @@ const transactMoney = asyncHandler(async (req, res) => {
     if (closingBlance < 0 || currbalance < 0) {
       res.status(404);
       throw new Error(
-        "Dont have the required amount in E-wallet, Payment failed"
+        "Payment failed - Insufficient Funds!"
       );
     }
     await Wallet.updateMany(
@@ -73,7 +73,7 @@ const transactMoney = asyncHandler(async (req, res) => {
     if (debitType === "debit") {
       res.status(404);
       throw new Error(
-        "Dont have the required amount in E-wallet, Payment failed"
+        "Payment failed - Insufficient Funds!"
       );
     }
   }

@@ -16,12 +16,19 @@ const clearuserInfo = () => {
 
 const Header = () => {
   const [logout, setLogOut] = useState(localStorage.getItem("userInfo"));
+  const [isOwner, setIsowner] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const showlogout = async () => {
     await setLogOut(localStorage.getItem("userInfo"));
   };
 
   useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      setIsAdmin(JSON.parse(userInfo).isAdmin);
+      setIsowner(JSON.parse(userInfo).isOwner);
+    }
     setLogOut(localStorage.getItem("userInfo"));
     showlogout();
   }, []);
@@ -59,7 +66,7 @@ const Header = () => {
                   <Link to="/wallet">Add Money</Link>
                 </NavDropdown.Item>
               )}
-              {logout && (
+              {!isOwner && !isAdmin && (
                 <NavDropdown.Item>
                   <Link to="/landowner">Enroll as LandOwner</Link>
                 </NavDropdown.Item>

@@ -8,3 +8,10 @@
   max-width: 100%;
   min-height: 480px;
 }
+.dashboard {
+  background-image: url("../multi-cars-in-parking.png");
+  min-height: 93vh;
+}
+h1 {
+  color: white;
+}

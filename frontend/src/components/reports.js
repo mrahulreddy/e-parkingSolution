@@ -238,7 +238,7 @@ const Reports = (props) => {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th colSpan={6}>
+                <th colSpan={7}>
                   <center>
                     <div onClick={get_users_data}> User Data ⟳</div>
                   </center>
@@ -250,7 +250,7 @@ const Reports = (props) => {
                 <th>Email</th>
                 <th>Is Admin</th>
                 <th>Is Owner</th>
-                <th>
+                <th colSpan={2}>
                   <center>Actions</center>
                 </th>
               </tr>
@@ -298,6 +298,16 @@ const Reports = (props) => {
                             Remove Owner
                           </Button>
                         </center>
+                      </td>
+                      <td>
+                        {dat.isAskedAsLandOwner && (
+                          <img
+                            src={require("../noti.png")}
+                            title="Requested as owner"
+                            width="40"
+                            height="40"
+                          />
+                        )}
                       </td>
                     </tr>
                   )
