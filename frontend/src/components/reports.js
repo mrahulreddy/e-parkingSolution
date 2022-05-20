@@ -461,7 +461,7 @@ const Reports = (props) => {
                         onClick={() => deleteBooking(dat._id)}
                         size="sm"
                       >
-                        Delete Booking
+                        Cancel Booking
                       </Button>
                     </center>
                   </td>
@@ -512,7 +512,7 @@ const Reports = (props) => {
                             onClick={() => deleteBooking(dat._id)}
                             size="sm"
                           >
-                            Delete Booking
+                            Cancel Booking
                           </Button>
                         </center>
                       </td>

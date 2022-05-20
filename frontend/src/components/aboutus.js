@@ -11,9 +11,8 @@ const Aboutus = () => {
         <Container>
           <h1>ABOUT US</h1>
           <div class="aboutus">
-            I have doing this project for academic purpose.. later I have a plan
-            to improve this project and market it to the near by parking land
-            owners.
+            I have doing this project for academic purpose. Later I have a plan
+            to improve this project.
           </div>
         </Container>
       </div>

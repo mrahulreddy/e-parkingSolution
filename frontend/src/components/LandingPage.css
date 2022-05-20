@@ -10,6 +10,9 @@
 .title {
   font-size: 95px;
 }
+.bold {
+  font-weight: bold;
+}
 .subtitle {
   font-size: 25px;
   padding-top: 10px;

@@ -22,7 +22,7 @@ export const LandingPage = () => {
             <div className="intro-text">
               <div>
                 <h1 className="title">Welcome to E-Parking Solutions</h1>
-                <p className="subtitle">One place for all your parking needs</p>
+                <p className="subtitle bold">One place for all your parking needs</p>
               </div>
               <div className="buttonContainer">
                 <Link to="/login">

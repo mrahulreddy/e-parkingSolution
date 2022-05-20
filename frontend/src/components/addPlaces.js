@@ -133,7 +133,7 @@ const AddPlaces = (props) => {
                 <Form.Label>Number of slots</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter total number of parking space available here"
+                  placeholder="Enter total parking bays"
                   onChange={(e) => setNos(e.target.value)}
                 />
               </Col>

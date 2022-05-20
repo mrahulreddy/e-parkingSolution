@@ -58,6 +58,7 @@ const addOwner = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (user) {
     user.isOwner = true;
+    user.isAskedAsLandOwner = false;
     const updatedUser = await user.save();
     res.json(updatedUser);
   }
