@@ -8,6 +8,10 @@ import Signup from "./components/signup";
 import { ContactUs } from "./components/contactus";
 import Validation from "./components/validation";
 import Ewallet from "./components/ewallet";
+import Aboutus from "./components/aboutus";
+import Lanwownerrequest from "./components/lanwownerrequest";
+import Faq from "./components/faq";
+import Header from "./components/Header";
 
 const App = () => (
   <BrowserRouter>
@@ -19,6 +23,9 @@ const App = () => (
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/signup/validation" element={<Validation />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/landowner" element={<Lanwownerrequest />} />
+        <Route path="/aboutus" element={<Aboutus />} />
         <Route path="/wallet" element={<Ewallet />} />
       </Routes>
     </main>

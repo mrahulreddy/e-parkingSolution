@@ -33,12 +33,9 @@ const addMoney = asyncHandler(async (req, res) => {
         success_url: `${process.env.CLIENT_URL}/wallet?st=` + transactionAmount,
         cancel_url: `${process.env.CLIENT_URL}/wallet?ft=` + transactionAmount,
       });
-      //   console.log("successfully stript implemented");
-      //   console.log(session.url);
+
       res.json({ url: session.url });
     } catch (e) {
-      //   console.log("Error in stripe");
-      //   console.log(e);
       res.status(500).json({ error: e.message });
     }
   }
@@ -72,6 +69,13 @@ const transactMoney = asyncHandler(async (req, res) => {
       { driverMailId: driverMailId },
       { $set: { currbalance: currbalance } }
     );
+  } else {
+    if (debitType === "debit") {
+      res.status(404);
+      throw new Error(
+        "Dont have the required amount in E-wallet, Payment failed"
+      );
+    }
   }
 
   const addedToWallet = await Wallet.create({

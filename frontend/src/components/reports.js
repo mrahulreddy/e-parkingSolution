@@ -14,9 +14,11 @@ const Reports = (props) => {
   const [isdriver, setIsdriver] = useState(true);
   const [udata, setUdata] = useState([]);
   const [suser, setSuser] = useState([]);
+  const [ownerPlaceHistory, setOwnerPlaceHistory] = useState([]);
   var cnt = 1;
   var cnt2 = 1;
   var cnt3 = 1;
+  var owncnt3 = 1;
   var cnt4 = 1;
   const get_users_data = async () => {
     const { data } = await axios.get("/api/users/getusers");
@@ -31,6 +33,49 @@ const Reports = (props) => {
   const get_place_data = async () => {
     const getplaces = await axios.get("/api/users/getplaces");
     setPdata2(getplaces.data);
+  };
+
+  const get_master_booking_data = async () => {
+    get_booking_data();
+    get_place_data();
+
+    var master_booking_data = [];
+    for (let index = 0; index < pdata2.length; index++) {
+      const pldat = pdata2[index];
+      if (pldat.ownerMailId == uid.toString()) {
+        // console.log("entered here");
+        for (let index1 = 0; index1 < bookdata.length; index1++) {
+          const bkdat = bookdata[index1];
+          if (pldat.placeName == bkdat.place) {
+            master_booking_data.push(bkdat);
+            // console.log(bkdat);
+          }
+        }
+      }
+    }
+    setOwnerPlaceHistory(master_booking_data);
+    // const storeItem = pdata2.map(
+    //   (dat) => dat.ownerMailId == uid.toString() && { dat }
+    // );
+
+    // console.log(storeItem, "storeItem");
+    // console.log(storeItem[0], "storeItem0");
+    // console.log(storeItem[0].placeName, "storeItem0");
+    // storeItem.map((dat) => console.log(dat.dat.placeName, "datplacename"));
+
+    // var strcntr = 0;
+    // const storeItem2 = bookdata.map(
+    //   (dat) => storeItem[strcntr].placeName == dat.place && dat
+    // );
+    // console.log(storeItem2, "storeItem2");
+    // setOwnerPlaces(
+    //   bookdata.map(
+    //     (item) =>
+    //       item.driverMailId == uid.toString() && {
+    //         item,
+    //       }
+    //   )
+    // );
   };
 
   const get_deposit_data = async () => {
@@ -171,6 +216,7 @@ const Reports = (props) => {
     get_place_data();
     get_booking_data();
     get_deposit_data();
+    get_master_booking_data();
   }, []);
 
   return (
@@ -278,7 +324,7 @@ const Reports = (props) => {
                 <th>Open Time</th>
                 <th>Close Time</th>
                 <th>Total Seats</th>
-                <th>Booked Seats</th>
+                {/* <th>Booked Seats</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -293,7 +339,7 @@ const Reports = (props) => {
                   <td>{dat.stime}</td>
                   <td>{dat.etime}</td>
                   <td>{dat.nos}</td>
-                  <td>{dat.nbs}</td>
+                  {/* <td>{dat.nbs}</td> */}
                   <td>
                     <center>
                       <Button
@@ -329,7 +375,7 @@ const Reports = (props) => {
                 <th>Open Time</th>
                 <th>Close Time</th>
                 <th>Total Seats</th>
-                <th>Booked Seats</th>
+                {/* <th>Booked Seats</th> */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -346,7 +392,7 @@ const Reports = (props) => {
                       <td>{dat.stime}</td>
                       <td>{dat.etime}</td>
                       <td>{dat.nos}</td>
-                      <td>{dat.nbs}</td>
+                      {/* <td>{dat.nbs}</td> */}
                       <td>
                         <center>
                           <Button
@@ -420,7 +466,7 @@ const Reports = (props) => {
               <tr>
                 <th colSpan={9}>
                   <center>
-                    <div onClick={get_booking_data}> Booking History ⟳</div>
+                    <div onClick={get_booking_data}> My Booking History ⟳</div>
                   </center>
                 </th>
               </tr>
@@ -429,7 +475,7 @@ const Reports = (props) => {
                 <th>Place Name</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-                <th>User MailId</th>
+                {/* <th>User MailId</th> */}
                 <th>Booked Seats</th>
                 <th>Booking Time</th>
                 <th>Amount per/Hour</th>
@@ -445,7 +491,7 @@ const Reports = (props) => {
                       <td>{dat.place}</td>
                       <td>{dat.startTime + ":00"}</td>
                       <td>{dat.endTime + ":00"}</td>
-                      <td>{dat.driverMailId}</td>
+                      {/* <td>{dat.driverMailId}</td> */}
                       <td>{dat.seats}</td>
                       <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
                       <td>{dat.amount}</td>
@@ -466,7 +512,45 @@ const Reports = (props) => {
             </tbody>
           </Table>
         )}
-
+        {isowner && !isadmin && (
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th colSpan={9}>
+                  <center>
+                    <div onClick={get_master_booking_data}>
+                      Master Booking History ⟳
+                    </div>
+                  </center>
+                </th>
+              </tr>
+              <tr>
+                <th>Sno</th>
+                <th>Place Name</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>User MailId</th>
+                <th>Booked Seats</th>
+                <th>Booking Time</th>
+                <th>Amount per/Hour</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ownerPlaceHistory.map((dat) => (
+                <tr>
+                  <td>{owncnt3 && owncnt3++}</td>
+                  <td>{dat.place}</td>
+                  <td>{dat.startTime + ":00"}</td>
+                  <td>{dat.endTime + ":00"}</td>
+                  <td>{dat.driverMailId}</td>
+                  <td>{dat.seats}</td>
+                  <td>{moment(dat.createdAt).format("MM/DD/YYYY")}</td>
+                  <td>{dat.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
         {isadmin && depositdata.length > 0 && (
           <Table striped bordered hover size="sm">
             <thead>

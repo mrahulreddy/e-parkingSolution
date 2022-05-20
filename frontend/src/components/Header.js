@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -12,10 +12,19 @@ import { Link } from "react-router-dom";
 const clearuserInfo = () => {
   localStorage.removeItem("userInfo");
 };
-console.log("HHHHHHHHHHHHHHHHHHHHHHH");
+// console.log("HHHHHHHHHHHHHHHHHHHHHHH");
 
 const Header = () => {
   const [logout, setLogOut] = useState(localStorage.getItem("userInfo"));
+
+  const showlogout = async () => {
+    await setLogOut(localStorage.getItem("userInfo"));
+  };
+
+  useEffect(() => {
+    setLogOut(localStorage.getItem("userInfo"));
+    showlogout();
+  }, []);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -34,21 +43,27 @@ const Header = () => {
               <Link to="/">Home</Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to="/">About Us</Link>
+              <Link to="/aboutus">About Us</Link>
             </Nav.Link>
-            <Nav.Link>
-              <Link to="/dashboard">Dashboard</Link>
-            </Nav.Link>
+            {logout && (
+              <Nav.Link>
+                <Link to="/dashboard">Dashboard</Link>
+              </Nav.Link>
+            )}
             <NavDropdown title="More" id="navbarScrollingDropdown">
               <NavDropdown.Item>
-                <Link to="/">User FAQ's</Link>
+                <Link to="/faq">User FAQ's</Link>
               </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/wallet">Add Money</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/">Enroll as LandOwner</Link>
-              </NavDropdown.Item>
+              {logout && (
+                <NavDropdown.Item>
+                  <Link to="/wallet">Add Money</Link>
+                </NavDropdown.Item>
+              )}
+              {logout && (
+                <NavDropdown.Item>
+                  <Link to="/landowner">Enroll as LandOwner</Link>
+                </NavDropdown.Item>
+              )}
               <NavDropdown.Divider />
               <NavDropdown.Item>
                 <Link to="/contactus">Contact us</Link>

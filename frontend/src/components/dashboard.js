@@ -51,7 +51,7 @@ const Dashboard = () => {
         <h1>
           <center>
             {isadmin && "Admin "}
-            {isowner && "Landowner "}
+            {isowner && !isadmin && "Landowner "}
             {!isadmin && !isowner && "Driver "}
             Dashboard
           </center>

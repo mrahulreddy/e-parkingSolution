@@ -1,4 +1,5 @@
 import "./seatMap.css";
+import "./bookplace.css";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
@@ -264,8 +265,15 @@ const BookPlace = (props) => {
 
       var driverMailId = JSON.parse(userInfo).email,
         description =
-          "Payment for " + splace + " " + bookedSeatcnt + " parking spaces",
-        transactionAmount = parseInt(amount) * parseInt(bookedSeatcnt),
+          "Payment for " +
+          splace +
+          " " +
+          bookedSeatcnt +
+          " parking space(s)  for " +
+          rhrs +
+          " hour(s)",
+        transactionAmount =
+          parseInt(amount) * parseInt(bookedSeatcnt) * parseInt(rhrs),
         debitType = "debit";
       if (
         window.confirm(
@@ -290,6 +298,7 @@ const BookPlace = (props) => {
       } else {
         paymentSucess = false;
       }
+      get_place_data(e);
     } catch (err) {
       setError(err.response.data.message);
       paymentSucess = false;
@@ -361,76 +370,92 @@ const BookPlace = (props) => {
         <Form>
           {error && <ErrorMessage message={error} />}
           {sucess && <SucessMessage message={sucess} />}
-          <select name="places" id="places-options">
-            <option selected>choose places</option>
-            {pdata.map((dat) => (
-              <option> {dat.placeName} </option>
-            ))}
-          </select>
-          <Row>
-            <Col>
-              <Form.Label>Start time</Form.Label>
-              <TimePicker
-                isOpen="true"
-                disableClock="true"
-                onChange={setStime}
-                value={stime}
-              />
-            </Col>
-            <Col>
-              <DatePicker onChange={getSelectedDate} />
-            </Col>
-            <Col>
-              <Form.Label>Required Hours</Form.Label>
-
-              <Form.Control
-                type="text"
-                value={rhrs}
-                onChange={(e) => setRhrs(e.target.value)}
-              />
-            </Col>
-            {/* <Col>
-              <Form.Label>Number of slots</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter number of space needed "
-                value={rseat}
-                onChange={(e) => setRseat(e.target.value)}
-              />
-            </Col> */}
-          </Row>
-          <Row>
-            <Col>
-              <Button variant="primary" onClick={get_available_seat}>
-                Check availablity
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                variant="primary"
-                disabled={bookedSeatcnt > 0 ? false : true}
-                onClick={bookSeats}
-              >
-                Book Place
-              </Button>
-            </Col>
-          </Row>
-          <br />
-          <Row>
-            <Form.Label>
-              Number of available space in{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>{splace} </u>on{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>
-                {moment(sdate).format("MM/DD/YYYY")}
-              </u>{" "}
-              at <u style={{ color: "#2b87e3", fontSize: "20px" }}>{stime}</u>{" "}
-              is <u style={{ color: "#2b87e3", fontSize: "20px" }}>{nos}</u> for{" "}
-              <u style={{ color: "#2b87e3", fontSize: "20px" }}>
-                {amount} {symbol}
-              </u>{" "}
-              per/Hour
-            </Form.Label>
-          </Row>
+          <center>
+            <table>
+              <tr>
+                <td rowspan={4}>
+                  <DatePicker onChange={getSelectedDate} />
+                </td>
+                <td align="right">
+                  <Form.Label>Select Place:</Form.Label>
+                </td>
+                <td>
+                  <select name="places" id="places-options">
+                    <option selected>choose places</option>
+                    {pdata.map((dat) => (
+                      <option> {dat.placeName} </option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td align="right">
+                  <Form.Label>Start time:</Form.Label>
+                </td>
+                <td>
+                  <TimePicker
+                    isOpen="true"
+                    disableClock="true"
+                    onChange={setStime}
+                    value={stime}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td align="right">
+                  <Form.Label>Required Hours:</Form.Label>
+                </td>
+                <td>
+                  <Form.Control
+                    type="text"
+                    value={rhrs}
+                    onChange={(e) => setRhrs(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Button variant="primary" onClick={get_available_seat}>
+                    Check availablity
+                  </Button>
+                </td>
+                <td align="right">
+                  <Button
+                    variant="primary"
+                    disabled={bookedSeatcnt > 0 ? false : true}
+                    onClick={bookSeats}
+                  >
+                    Book Place
+                  </Button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan={3} align="center">
+                  <Form.Label>
+                    Number of available space in{" "}
+                    <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                      {splace}{" "}
+                    </u>
+                    on{" "}
+                    <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                      {moment(sdate).format("MM/DD/YYYY")}
+                    </u>{" "}
+                    at{" "}
+                    <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                      {stime}
+                    </u>{" "}
+                    is{" "}
+                    <u style={{ color: "#2b87e3", fontSize: "20px" }}>{nos}</u>{" "}
+                    for{" "}
+                    <u style={{ color: "#2b87e3", fontSize: "20px" }}>
+                      {amount} {symbol}
+                    </u>{" "}
+                    per/Hour
+                  </Form.Label>
+                </td>
+              </tr>
+            </table>
+          </center>
         </Form>
         <div>
           {/* <Table borderless> */}
@@ -439,9 +464,7 @@ const BookPlace = (props) => {
             <thead>
               <tr>
                 <th colSpan={10}>
-                  <center>
-                    <hr></hr>Available Seats
-                  </center>
+                  <center>Available Seats</center>
                 </th>
               </tr>
               <tr>

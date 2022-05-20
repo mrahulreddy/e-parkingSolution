@@ -9,7 +9,7 @@ import Header from "../components/Header";
 import Loading from "./loading";
 import ErrorMessage from "./ErrorMessage";
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -20,7 +20,7 @@ const Login = () => {
     const userInfo = localStorage.getItem("userInfo");
 
     if (userInfo) {
-      // navigate("/dashboard");
+      navigate("/dashboard");
       setLogin(true);
     }
   }, [navigate]);
